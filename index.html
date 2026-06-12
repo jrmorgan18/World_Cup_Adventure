@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#082b5b">
+  <meta name="description" content="A playful World Cup learning adventure for young soccer fans.">
+  <title>World Cup Adventure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://flagcdn.com">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" data-go="home" aria-label="Go home">
+      <span class="brand-ball">&#9917;</span>
+      <span>World Cup Adventure</span>
+    </button>
+    <div class="score-pill" aria-label="Stars earned"><span>&#9733;</span><strong id="star-count">0</strong></div>
+    <button class="icon-button" id="sound-button" aria-label="Turn read aloud on" title="Read aloud">READ</button>
+  </header>
+  <main id="app" tabindex="-1"></main>
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button data-go="home"><span>&#8962;</span>Home</button>
+    <button data-go="passport"><span>&#9733;</span>Passport</button>
+    <button data-go="grownups"><span>&#128197;</span>Watch</button>
+  </nav>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+  <script src="app.js?v=3"></script>
+</body>
+</html>

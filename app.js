@@ -1,0 +1,246 @@
+const app = document.querySelector("#app");
+const starEl = document.querySelector("#star-count");
+const toast = document.querySelector("#toast");
+const soundButton = document.querySelector("#sound-button");
+
+const ICON = {
+  usa: "&#9733;", players: "&#9917;", world: "&#127758;",
+  history: "&#127942;", smart: "&#129504;", penalty: "&#129349;"
+};
+
+const missions = [
+  { id: "usa", icon: ICON.usa, title: "Team USA Trail", desc: "Meet our group and get ready to cheer." },
+  { id: "players", icon: ICON.players, title: "Build Team USA", desc: "Meet the starters and place them on the field." },
+  { id: "world", icon: ICON.world, title: "World Explorer", desc: "Explore countries and earn passport stamps." },
+  { id: "history", icon: ICON.history, title: "Build the Cup", desc: "Level up through World Cup history." },
+  { id: "smart", icon: ICON.smart, title: "Soccer Smarts", desc: "Rules, teamwork, and great choices." },
+  { id: "penalty", icon: ICON.penalty, title: "Penalty Party", desc: "Pick your spot and score for the USA." }
+];
+
+const players = [
+  { id:"freese", name:"Matt Freese", role:"Goalkeeper", zone:"gk", wiki:"Matt_Freese", clue:"Protects the goal and starts attacks." },
+  { id:"robinson", name:"Antonee Robinson", role:"Defender", zone:"def", wiki:"Antonee_Robinson", clue:"Fast left back nicknamed Jedi." },
+  { id:"ream", name:"Tim Ream", role:"Defender - Captain", zone:"def", wiki:"Tim_Ream", clue:"Calm leader and captain in the center." },
+  { id:"richards", name:"Chris Richards", role:"Defender", zone:"def", wiki:"Chris_Richards_(soccer)", clue:"Strong center back who stops attacks." },
+  { id:"dest", name:"Sergino Dest", role:"Defender", zone:"def", wiki:"Sergi%C3%B1o_Dest", clue:"Skillful fullback who loves to attack." },
+  { id:"freeman", name:"Alex Freeman", role:"Defender", zone:"def", wiki:"Alex_Freeman", clue:"Young, quick defender on the right." },
+  { id:"adams", name:"Tyler Adams", role:"Midfielder", zone:"mid", wiki:"Tyler_Adams", clue:"Wins the ball and organizes the team." },
+  { id:"mckennie", name:"Weston McKennie", role:"Midfielder", zone:"mid", wiki:"Weston_McKennie", clue:"Energetic midfielder and great teammate." },
+  { id:"tillman", name:"Malik Tillman", role:"Midfielder", zone:"mid", wiki:"Malik_Tillman", clue:"Creative player who makes chances." },
+  { id:"pulisic", name:"Christian Pulisic", role:"Forward", zone:"fwd", wiki:"Christian_Pulisic", clue:"Quick dribbler and big-game scorer." },
+  { id:"balogun", name:"Folarin Balogun", role:"Forward", zone:"fwd", wiki:"Folarin_Balogun", clue:"Striker who makes fast runs toward goal." }
+];
+
+const countries = [
+  {code:"us",name:"United States",continent:"North America",food:"Hamburger",foodName:"Hamburger",fact:"One of three 2026 host countries.",favorite:true},
+  {code:"mx",name:"Mexico",continent:"North America",food:"Taco",foodName:"Tacos",fact:"The only country to host the men's World Cup three times."},
+  {code:"ca",name:"Canada",continent:"North America",food:"Poutine",foodName:"Poutine",fact:"A 2026 host with matches from coast to coast."},
+  {code:"br",name:"Brazil",continent:"South America",food:"P%C3%A3o_de_queijo",foodName:"Pao de queijo",fact:"Brazil has won a record five men's World Cups.",favorite:true},
+  {code:"ar",name:"Argentina",continent:"South America",food:"Empanada",foodName:"Empanadas",fact:"Argentina won the most recent men's World Cup in 2022.",favorite:true},
+  {code:"co",name:"Colombia",continent:"South America",food:"Arepa",foodName:"Arepas",fact:"Colombia is famous for bright yellow soccer shirts.",favorite:true},
+  {code:"ec",name:"Ecuador",continent:"South America",food:"Encebollado",foodName:"Encebollado",fact:"Ecuador's home stadium is high in the Andes mountains."},
+  {code:"py",name:"Paraguay",continent:"South America",food:"Sopa_paraguaya",foodName:"Sopa paraguaya",fact:"Paraguay is Team USA's first group opponent."},
+  {code:"uy",name:"Uruguay",continent:"South America",food:"Chivito_(sandwich)",foodName:"Chivito",fact:"Uruguay won the very first World Cup in 1930."},
+  {code:"gb-eng",shape:"gb",name:"England",continent:"Europe",food:"Fish_and_chips",foodName:"Fish and chips",fact:"England won the World Cup at home in 1966.",favorite:true},
+  {code:"fr",name:"France",continent:"Europe",food:"Croissant",foodName:"Croissant",fact:"France won in 1998 and 2018.",favorite:true},
+  {code:"es",name:"Spain",continent:"Europe",food:"Paella",foodName:"Paella",fact:"Spain won its first World Cup in 2010.",favorite:true},
+  {code:"de",name:"Germany",continent:"Europe",food:"Bratwurst",foodName:"Bratwurst",fact:"Germany has won four men's World Cups.",favorite:true},
+  {code:"pt",name:"Portugal",continent:"Europe",food:"Pastel_de_nata",foodName:"Pastel de nata",fact:"Portugal is known for creative attacking players.",favorite:true},
+  {code:"nl",name:"Netherlands",continent:"Europe",food:"Stroopwafel",foodName:"Stroopwafel",fact:"The Netherlands wears bright orange.",favorite:true},
+  {code:"be",name:"Belgium",continent:"Europe",food:"Belgian_waffle",foodName:"Waffles",fact:"Belgium reached third place in 2018."},
+  {code:"hr",name:"Croatia",continent:"Europe",food:"Pa%C5%A1ticada",foodName:"Pasticada",fact:"Croatia reached the 2018 final."},
+  {code:"tr",name:"T\u00fcrkiye",continent:"Europe and Asia",food:"Baklava",foodName:"Baklava",fact:"T\u00fcrkiye is Team USA's final group opponent."},
+  {code:"no",name:"Norway",continent:"Europe",food:"Waffle",foodName:"Norwegian waffles",fact:"Norway has one of the world's most famous strikers.",favorite:true},
+  {code:"ch",name:"Switzerland",continent:"Europe",food:"Fondue",foodName:"Cheese fondue",fact:"Switzerland's flag is a white cross on red."},
+  {code:"at",name:"Austria",continent:"Europe",food:"Wiener_schnitzel",foodName:"Wiener schnitzel",fact:"Austria reached third place in 1954."},
+  {code:"ma",name:"Morocco",continent:"Africa",food:"Tagine",foodName:"Tagine",fact:"Morocco was the first African semifinalist in 2022.",favorite:true},
+  {code:"eg",name:"Egypt",continent:"Africa",food:"Koshary",foodName:"Koshary",fact:"Egypt is home to the famous pyramids."},
+  {code:"dz",name:"Algeria",continent:"Africa",food:"Couscous",foodName:"Couscous",fact:"Algeria is Africa's largest country by area."},
+  {code:"za",name:"South Africa",continent:"Africa",food:"Bobotie",foodName:"Bobotie",fact:"South Africa hosted the 2010 World Cup."},
+  {code:"ci",name:"Ivory Coast",continent:"Africa",food:"Cassava",foodName:"Attieke",fact:"The team is nicknamed the Elephants."},
+  {code:"sn",name:"Senegal",continent:"Africa",food:"Thieboudienne",foodName:"Thieboudienne",fact:"Senegal reached the quarterfinals in 2002."},
+  {code:"gh",name:"Ghana",continent:"Africa",food:"Jollof_rice",foodName:"Jollof rice",fact:"Ghana reached the quarterfinals in 2010."},
+  {code:"tn",name:"Tunisia",continent:"Africa",food:"Brik",foodName:"Brik",fact:"Tunisia was the first African team to win a World Cup match."},
+  {code:"cv",name:"Cabo Verde",continent:"Africa",food:"Cachupa",foodName:"Cachupa",fact:"Cabo Verde is a group of Atlantic Ocean islands."},
+  {code:"jp",name:"Japan",continent:"Asia",food:"Onigiri",foodName:"Onigiri",fact:"Japan's team is called the Samurai Blue."},
+  {code:"kr",name:"South Korea",continent:"Asia",food:"Bibimbap",foodName:"Bibimbap",fact:"South Korea reached the semifinals in 2002."},
+  {code:"ir",name:"Iran",continent:"Asia",food:"Chelow_kabab",foodName:"Chelow kebab",fact:"Iran is one of Asia's most successful teams."},
+  {code:"sa",name:"Saudi Arabia",continent:"Asia",food:"Kabsa",foodName:"Kabsa",fact:"Saudi Arabia beat Argentina at the 2022 World Cup."},
+  {code:"uz",name:"Uzbekistan",continent:"Asia",food:"Pilaf",foodName:"Plov",fact:"Uzbekistan qualified for its first men's World Cup."},
+  {code:"jo",name:"Jordan",continent:"Asia",food:"Mansaf",foodName:"Mansaf",fact:"Jordan qualified for its first men's World Cup."},
+  {code:"qa",name:"Qatar",continent:"Asia",food:"Kabsa",foodName:"Machboos",fact:"Qatar hosted the 2022 World Cup."},
+  {code:"au",name:"Australia",continent:"Oceania",food:"Meat_pie_(Australia_and_New_Zealand)",foodName:"Meat pie",fact:"Australia's team is called the Socceroos."},
+  {code:"nz",name:"New Zealand",continent:"Oceania",food:"Pavlova",foodName:"Pavlova",fact:"New Zealand's team is called the All Whites."}
+];
+const populousCodes = new Set(["us","br","mx","jp","eg","ir","tr","de","za","gb-eng","fr","co","kr","es","ar","dz","gh","sa","ma","uz"]);
+
+const simpleQuizzes = {
+  usa: [
+    {q:"Which team is Team USA's first group opponent?",a:["Paraguay","Spain","Brazil","Japan"],c:0,f:"Paraguay is in South America."},
+    {q:"Who is Team USA's captain in this adventure?",a:["Tim Ream","Lionel Messi","Matt Freese","Sergino Dest"],c:0,f:"Tim Ream is a calm, experienced defender."},
+    {q:"How many points does a group-stage win earn?",a:["1","2","3","10"],c:2,f:"A win earns 3 points. A tie earns 1."},
+    {q:"Which position can use hands inside the penalty area?",a:["Forward","Goalkeeper","Defender","Captain"],c:1,f:"The goalkeeper protects the goal."}
+  ],
+  smart: [
+    {q:"Your teammate is open near goal. What is a great choice?",a:["Pass the ball","Hide the ball","Sit down","Use your hands"],c:0,f:"A smart pass helps the whole team."},
+    {q:"The other team scores. What should you do?",a:["Blame someone","Keep trying together","Quit","Argue"],c:1,f:"Great teammates encourage each other."},
+    {q:"An opponent falls. What shows respect?",a:["Laugh","Help them up","Take the ball away","Point"],c:1,f:"Fair play means competing hard and showing respect."},
+    {q:"A group game ends tied. What happens?",a:["Each team earns 1 point","Both lose","Play all night","Flip a coin"],c:0,f:"A group-stage tie earns each team one point."}
+  ]
+};
+
+const historyLevels = [
+  {id:"rookie",title:"Rookie Researcher",badge:"Bronze Ball",questions:[
+    {q:"Who won the most recent men's World Cup in 2022?",a:["Argentina","USA","Spain","Japan"],c:0,f:"Argentina beat France in a thrilling final."},
+    {q:"Which country has won the most men's World Cups?",a:["Brazil","Argentina","Germany","France"],c:0,f:"Brazil has won five times."},
+    {q:"Who won the very first World Cup in 1930?",a:["Uruguay","Brazil","England","Mexico"],c:0,f:"Uruguay hosted and won the first tournament."}
+  ]},
+  {id:"expert",title:"History Expert",badge:"Silver Boot",questions:[
+    {q:"Who has scored the most goals in men's World Cup history?",a:["Miroslav Klose","Lionel Messi","Pele","Cristiano Ronaldo"],c:0,f:"Germany's Miroslav Klose scored 16 World Cup goals."},
+    {q:"Which player won three World Cups?",a:["Pele","Messi","Maradona","Mbappe"],c:0,f:"Brazil legend Pele won in 1958, 1962, and 1970."},
+    {q:"Which country has played in the most men's World Cup finals?",a:["Germany","Brazil","USA","Spain"],c:0,f:"Germany has reached the final eight times."}
+  ]},
+  {id:"legend",title:"World Cup Legend",badge:"Golden Trophy",questions:[
+    {q:"What was Team USA's best men's World Cup finish?",a:["Semifinals in 1930","Champion in 1994","Final in 2010","Quarterfinal in 2022"],c:0,f:"The USA reached the semifinals at the first World Cup."},
+    {q:"Which nation was the first African men's semifinalist?",a:["Morocco","Senegal","Egypt","South Africa"],c:0,f:"Morocco made history in 2022."},
+    {q:"Which country won the 2010 World Cup?",a:["Spain","Netherlands","Brazil","Germany"],c:0,f:"Spain beat the Netherlands in the final."},
+    {q:"How many teams play in the 2026 World Cup?",a:["48","32","24","16"],c:0,f:"The 2026 tournament expanded to 48 teams."}
+  ]}
+];
+
+let state = JSON.parse(localStorage.getItem("wc-adventure-state") || '{"stars":0,"stamps":[],"badges":[],"countryStamps":[]}');
+state.badges ||= []; state.countryStamps ||= []; state.stamps ||= [];
+let soundOn = false, quizQuestions = [], quizIndex = 0, quizMeta = null, answered = false;
+let selectedPlayer = null, formationPlaced = {};
+
+function save(){ localStorage.setItem("wc-adventure-state",JSON.stringify(state)); starEl.textContent=state.stars; }
+function speak(text){ if(!soundOn||!("speechSynthesis" in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text);u.rate=.88;speechSynthesis.speak(u); }
+function page(html){ app.innerHTML=html; window.scrollTo({top:0,behavior:"smooth"}); app.focus({preventScroll:true}); hydrateWikiImages(); }
+function flag(country,size="160"){ return `<img class="flag-img" src="https://flagcdn.com/w${size}/${country.code}.png" alt="${country.name} flag">`; }
+function showToast(message){toast.textContent=message;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1900);}
+function confetti(){const box=document.querySelector("#confetti");for(let i=0;i<45;i++){const x=document.createElement("i");x.style.left=`${Math.random()*100}%`;x.style.background=["#e63946","#ffca3a","#1167b1","#2f9e44"][i%4];x.style.animationDelay=`${Math.random()*.5}s`;box.appendChild(x);setTimeout(()=>x.remove(),2300);}}
+function award(stamp,stars=5){state.stars+=stars;if(!state.stamps.includes(stamp)){state.stamps.push(stamp);confetti();}save();showToast(`Achievement earned! +${stars} stars`);}
+async function hydrateWikiImages(){
+  document.querySelectorAll("img[data-wiki]").forEach(async img=>{
+    if(img.dataset.loaded)return;img.dataset.loaded="1";
+    try{
+      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${img.dataset.wiki}`),d=await r.json();
+      if(d.thumbnail?.source){img.src=d.thumbnail.source;return;}
+      const q=await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=700&origin=*&titles=${img.dataset.wiki}`),data=await q.json();
+      const wikiPage=Object.values(data.query?.pages||{})[0];if(wikiPage?.thumbnail?.source)img.src=wikiPage.thumbnail.source;
+    }catch(e){}
+  });
+}
+
+function home(){
+  page(`<section class="hero"><img src="assets/team-usa-hero.png" alt="Illustrated Team USA players celebrating"><div class="hero-copy"><p class="eyebrow">Your mission starts now</p><h1>Become a World Cup Superfan!</h1><p>Meet Team USA, explore the world, and build your soccer knowledge.</p><div><button class="primary" data-go="players">Build Team USA &rarr;</button></div></div></section>
+  <div class="fact-strip"><div class="fact"><strong>48 teams</strong>from around the world</div><div class="fact"><strong>${countries.length} countries</strong>ready to explore here</div><div class="fact"><strong>${state.countryStamps.length} stamps</strong>in your passport</div></div>
+  <h2 class="section-title">Choose a mission</h2><section class="game-grid">${missions.map(m=>`<button class="game-card" data-go="${m.id}"><span class="mini-stamp ${state.stamps.includes(m.id)?"earned":""}">&#10003;</span><span class="game-icon">${m.icon}</span><h3>${m.title}</h3><p>${m.desc}</p></button>`).join("")}</section>`);
+}
+
+function shuffleQuestion(question){
+  const choices=question.a.map((text,index)=>({text,correct:index===question.c}));
+  for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
+  return {...question,a:choices.map(x=>x.text),c:choices.findIndex(x=>x.correct)};
+}
+function startQuiz(questions,meta){quizQuestions=questions.map(shuffleQuestion);quizIndex=0;quizMeta=meta;renderQuiz();}
+function renderQuiz(){
+  answered=false;const q=quizQuestions[quizIndex];
+  page(`<button class="back" data-go="${quizMeta.back}">&larr; Back</button><p class="eyebrow">${quizMeta.label}</p><h2>Question ${quizIndex+1} of ${quizQuestions.length}</h2><div class="progress"><span style="width:${quizIndex/quizQuestions.length*100}%"></span></div><section class="panel"><div class="question">${q.q}</div><div class="answers">${q.a.map((x,i)=>`<button class="answer" data-answer="${i}">${x}</button>`).join("")}</div><div class="feedback" id="feedback">Tap your best answer. You can try again.</div><div class="next-row"><button class="primary" id="next-question" hidden>Next &rarr;</button></div></section>`);
+  speak(q.q);
+}
+function answerQuiz(button){
+  if(answered)return;const q=quizQuestions[quizIndex],pick=Number(button.dataset.answer);
+  if(pick!==q.c){button.classList.add("wrong");document.querySelector("#feedback").innerHTML="<strong>Good try!</strong> Try another answer.";return;}
+  answered=true;button.classList.add("correct");document.querySelectorAll(".answer").forEach((b,i)=>{if(i!==q.c)b.disabled=true;});
+  document.querySelector("#feedback").innerHTML=`<strong>Goal! &#9733;</strong>${q.f}`;document.querySelector("#next-question").hidden=false;state.stars++;save();speak(q.f);
+}
+function nextQuestion(){if(++quizIndex<quizQuestions.length)return renderQuiz();finishQuiz();}
+function finishQuiz(){
+  if(quizMeta.type==="history"){if(!state.badges.includes(quizMeta.id))state.badges.push(quizMeta.id);award("history",quizMeta.stars);return historyHub();}
+  if(quizMeta.type==="country"){if(!state.countryStamps.includes(quizMeta.id))state.countryStamps.push(quizMeta.id);award("world",5);return countryDetail(quizMeta.id);}
+  award(quizMeta.id,5);home();
+}
+
+function usa(){
+  const group=["py","au","tr"].map(code=>countries.find(c=>c.code===code));
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Team USA Trail</p><h1>Our Group Journey</h1><p>Teams play three group games. Wins earn <strong>3 points</strong>, ties earn <strong>1 point</strong>.</p><section class="match-trail">${group.map((c,i)=>`<article class="match">${flag(c)}<div><time>MATCH ${i+1}</time><h3>USA vs ${c.name}</h3><p>${c.fact}</p></div><button class="primary" data-country="${c.code}">Explore</button></article>`).join("")}</section><div class="next-row"><button class="primary" data-quiz="usa">Take Team USA Quiz</button></div>`);
+}
+
+function wikiPlayerImage(p,small=false){return `<img class="${small?"mini-player-photo":"player-photo"}" data-wiki="${p.wiki}" src="assets/player-placeholder.svg" alt="${p.name}">`;}
+function playerPage(){
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Build Team USA</p><h1>Meet the Starting Team</h1><p>First learn the players, then tap <strong>Play Formation Game</strong> to put all 11 in their position groups.</p><section class="player-grid">${players.map((p,i)=>`<button class="player-card" data-player="${i}">${wikiPlayerImage(p)}<h3>${p.name}</h3><p class="position">${p.role}</p><p>${p.clue}</p></button>`).join("")}</section><div class="next-row"><button class="primary" data-go="formation">Play Formation Game &rarr;</button></div>`);
+}
+function playerDetail(i){const p=players[i];showToast(`${p.name}: ${p.clue}`);speak(`${p.name}. ${p.role}. ${p.clue}`);}
+function formation(){
+  selectedPlayer=null;formationPlaced={};
+  page(`<button class="back" data-go="players">&larr; Player cards</button><p class="eyebrow">Formation Challenge</p><h1>Put Team USA on the Field</h1><p>Tap a player card, then tap the correct position zone.</p><div class="formation-layout"><section class="formation-pitch">
+    <button class="zone zone-fwd" data-zone="fwd"><strong>FORWARDS</strong><span>Score goals</span><div class="placed" id="placed-fwd"></div></button>
+    <button class="zone zone-mid" data-zone="mid"><strong>MIDFIELDERS</strong><span>Connect the team</span><div class="placed" id="placed-mid"></div></button>
+    <button class="zone zone-def" data-zone="def"><strong>DEFENDERS</strong><span>Stop attacks</span><div class="placed" id="placed-def"></div></button>
+    <button class="zone zone-gk" data-zone="gk"><strong>GOALKEEPER</strong><span>Protect the goal</span><div class="placed" id="placed-gk"></div></button>
+  </section><section><h3 id="formation-status">Choose a player</h3><div class="player-bank">${players.map(p=>`<button class="bank-card" data-select-player="${p.id}">${wikiPlayerImage(p,true)}<span>${p.name}</span></button>`).join("")}</div></section></div>`);
+}
+function selectFormationPlayer(id){if(formationPlaced[id])return;selectedPlayer=id;document.querySelectorAll(".bank-card").forEach(b=>b.classList.toggle("selected",b.dataset.selectPlayer===id));const p=players.find(x=>x.id===id);document.querySelector("#formation-status").textContent=`Where does ${p.name} play?`;}
+function placeFormation(zone){
+  if(!selectedPlayer){showToast("Choose a player card first");return;}const p=players.find(x=>x.id===selectedPlayer);
+  if(p.zone!==zone){showToast(`Try again: ${p.name} is a ${p.role}`);return;}
+  formationPlaced[p.id]=true;document.querySelector(`[data-select-player="${p.id}"]`).classList.add("placed-card");document.querySelector(`#placed-${zone}`).insertAdjacentHTML("beforeend",`<span class="placed-name">${p.name.split(" ").pop()}</span>`);selectedPlayer=null;
+  document.querySelector("#formation-status").textContent=`Great placement! ${Object.keys(formationPlaced).length} of 11`;
+  if(Object.keys(formationPlaced).length===players.length){award("players",15);document.querySelector("#formation-status").textContent="Starting team complete! Formation badge earned.";}
+}
+
+function worldPage(){
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">World Explorer</p><h1>Explore the Soccer World</h1><p>Visit a country to see its flag, shape, continent, food, and soccer story. Then pass its quiz to stamp your passport.</p><div class="filter-row"><button class="filter active" data-filter="all">All ${countries.length}</button><button class="filter" data-filter="population">20 Most Populous</button><button class="filter" data-filter="favorite">Favorites</button><button class="filter" data-filter="Africa">Africa</button><button class="filter" data-filter="Asia">Asia</button><button class="filter" data-filter="Europe">Europe</button></div><section class="country-grid" id="country-grid">${countryCards(countries)}</section>`);
+}
+function countryCards(list){return list.map(c=>`<button class="country-card" data-country="${c.code}">${flag(c)}<h3>${c.name}</h3><p>${c.continent}</p>${c.favorite?'<span class="favorite-tag">Tournament favorite</span>':""}${populousCodes.has(c.code)?'<span class="population-tag">Top 20 population</span>':""}${state.countryStamps.includes(c.code)?'<span class="earned-tag">STAMP EARNED</span>':""}</button>`).join("");}
+function filterCountries(filter){const list=filter==="all"?countries:filter==="favorite"?countries.filter(c=>c.favorite):filter==="population"?countries.filter(c=>populousCodes.has(c.code)):countries.filter(c=>c.continent.includes(filter));document.querySelector("#country-grid").innerHTML=countryCards(list);document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter));}
+function countryDetail(code){
+  const c=countries.find(x=>x.code===code);if(!c)return worldPage();
+  page(`<button class="back" data-go="world">&larr; Country explorer</button><section class="country-profile"><div class="country-profile-head">${flag(c,"320")}<div><p class="eyebrow">${c.continent}</p><h1>${c.name}</h1><p>${c.fact}</p></div></div><div class="explore-grid"><article class="visual-card"><h3>Country Shape</h3><img class="shape-img" src="https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${c.shape||c.code}/vector.svg" alt="Shape of ${c.name}"></article><article class="visual-card"><h3>Food: ${c.foodName}</h3><img class="food-img" data-wiki="${c.food}" src="assets/food-placeholder.svg" alt="${c.foodName}"></article></div><button class="primary wide" data-country-quiz="${c.code}">${state.countryStamps.includes(c.code)?"Replay Quiz":"Take Quiz and Earn Stamp"} &rarr;</button></section>`);
+}
+function uniqueDistractors(correct,values,count=3){
+  return [...new Set(values)].filter(value=>value!==correct).slice(0,count);
+}
+function countryQuiz(code){
+  const c=countries.find(x=>x.code===code),others=countries.filter(x=>x.code!==code);
+  const continentOptions=[c.continent,...uniqueDistractors(c.continent,others.map(x=>x.continent))];
+  const foodOptions=[c.foodName,...uniqueDistractors(c.foodName,others.map(x=>x.foodName))];
+  startQuiz([
+    {q:`Which country uses this flag?<div class="quiz-flag">${flag(c,"320")}</div>`,a:[c,...others.slice(0,3)].map(x=>`${x.name}`),c:0,f:`That is the flag of ${c.name}.`},
+    {q:`Which continent is ${c.name} in?`,a:continentOptions,c:0,f:`${c.name} is in ${c.continent}.`},
+    {q:`Which food can you explore from ${c.name}?`,a:foodOptions,c:0,f:`${c.foodName} is connected with ${c.name}.`}
+  ],{type:"country",id:code,label:`${c.name} Passport Quiz`,back:"world",stars:5});
+}
+
+function historyHub(){
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Build the Cup</p><h1>World Cup History Levels</h1><p>Beat each level to unlock the next, earn its badge, and collect stars. Facts refer to the men's World Cup.</p><section class="level-grid">${historyLevels.map((l,i)=>{const locked=i>0&&!state.badges.includes(historyLevels[i-1].id);return `<article class="level-card ${state.badges.includes(l.id)?"complete":""} ${locked?"locked":""}"><span class="level-number">${i+1}</span><h2>${l.title}</h2><p><strong>${l.badge}</strong></p><p>${locked?"Complete the level before this one to unlock.":`${l.questions.length} history questions`}</p><button class="primary" data-history="${l.id}" ${locked?"disabled":""}>${locked?"Locked":state.badges.includes(l.id)?"Replay Level":"Start Level"}</button></article>`;}).join("")}</section>`);
+}
+function historyLevel(id){const l=historyLevels.find(x=>x.id===id);startQuiz(l.questions,{type:"history",id:l.id,label:`Level: ${l.title}`,back:"history",stars:(historyLevels.indexOf(l)+1)*5});}
+
+function passport(){
+  page(`<p class="eyebrow">Adventure Passport</p><h1>Your Collection</h1><div class="fact-strip"><div class="fact"><strong>${state.stars}</strong>stars</div><div class="fact"><strong>${state.badges.length}/3</strong>history badges</div><div class="fact"><strong>${state.countryStamps.length}/${countries.length}</strong>country stamps</div></div><h2>History Badges</h2><section class="badge-row">${historyLevels.map(l=>`<div class="badge ${state.badges.includes(l.id)?"earned":""}"><span>&#127942;</span><strong>${l.badge}</strong></div>`).join("")}</section><h2>Country Stamps</h2><section class="passport country-passport">${countries.map(c=>`<button class="stamp ${state.countryStamps.includes(c.code)?"earned":""}" data-country="${c.code}">${flag(c)}<strong>${c.name}</strong></button>`).join("")}</section>`);
+}
+
+function penalty(){page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Penalty Party</p><h1>Score for Team USA!</h1><p id="kick-score">Goals: 0 | Kicks: 0</p><div class="pitch"><div class="goal"></div><div class="goalie">GK</div><div class="ball">&#9917;</div></div><div class="kick-row"><button class="kick-button" data-kick="left">Left</button><button class="kick-button" data-kick="middle">Middle</button><button class="kick-button" data-kick="right">Right</button></div>`);}
+let kicks=0,goals=0;
+function kick(direction){if(kicks>=5)return;kicks++;const choices=["left","middle","right"],keeper=choices[Math.floor(Math.random()*3)],g=document.querySelector(".goalie"),b=document.querySelector(".ball");g.style.left=keeper==="left"?"25%":keeper==="right"?"70%":"calc(50% - 34px)";b.style.left=direction==="left"?"27%":direction==="right"?"72%":"calc(50% - 25px)";b.style.bottom="260px";if(keeper!==direction){goals++;state.stars++;save();showToast("GOAL!");}else showToast("Great save!");document.querySelector("#kick-score").textContent=`Goals: ${goals} | Kicks: ${kicks} of 5`;document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=true);setTimeout(()=>{b.style.left="calc(50% - 25px)";b.style.bottom="65px";g.style.left="calc(50% - 34px)";document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=false);if(kicks===5){award("penalty",goals||1);kicks=0;goals=0;}},850);}
+function grownups(){page(`<p class="eyebrow">Watch Together</p><h1>Match-Day Games</h1><section class="game-grid"><article class="game-card"><span class="game-icon">&#128269;</span><h3>Player Spotter</h3><p>Choose two player cards and spot them on TV.</p></article><article class="game-card"><span class="game-icon">&#10112;</span><h3>Pass Counter</h3><p>Count consecutive Team USA passes.</p></article><article class="game-card"><span class="game-icon">&#9733;</span><h3>Teamwork Detective</h3><p>Spot a helpful run, pass, high five, or fair-play moment.</p></article></section>`);}
+
+function navigate(route){const routes={home,usa,players:playerPage,formation,world:worldPage,history:historyHub,smart:()=>startQuiz(simpleQuizzes.smart,{type:"mission",id:"smart",label:"Soccer Smarts",back:"home"}),penalty,passport,grownups};(routes[route]||home)();}
+document.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");if(go)return navigate(go.dataset.go);
+  const ans=e.target.closest("[data-answer]");if(ans)return answerQuiz(ans);
+  const p=e.target.closest("[data-player]");if(p)return playerDetail(Number(p.dataset.player));
+  const select=e.target.closest("[data-select-player]");if(select)return selectFormationPlayer(select.dataset.selectPlayer);
+  const zone=e.target.closest("[data-zone]");if(zone)return placeFormation(zone.dataset.zone);
+  const country=e.target.closest("[data-country]");if(country)return countryDetail(country.dataset.country);
+  const cq=e.target.closest("[data-country-quiz]");if(cq)return countryQuiz(cq.dataset.countryQuiz);
+  const filter=e.target.closest("[data-filter]");if(filter)return filterCountries(filter.dataset.filter);
+  const hist=e.target.closest("[data-history]");if(hist)return historyLevel(hist.dataset.history);
+  const quiz=e.target.closest("[data-quiz]");if(quiz)return startQuiz(simpleQuizzes[quiz.dataset.quiz],{type:"mission",id:quiz.dataset.quiz,label:"Team USA Quiz",back:"usa"});
+  const k=e.target.closest("[data-kick]");if(k)return kick(k.dataset.kick);
+  if(e.target.closest("#next-question"))return nextQuestion();
+});
+soundButton.addEventListener("click",()=>{soundOn=!soundOn;soundButton.textContent=soundOn?"ON":"READ";if(soundOn)speak("Read aloud is on.");});
+save();home();
