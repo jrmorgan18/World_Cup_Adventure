@@ -155,6 +155,9 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 .visual-card { overflow: hidden; padding: 14px; border-radius: 18px; background: #eef7fc; text-align: center; }
 .shape-img, .food-img { display: block; width: 100%; height: 240px; padding: 10px; border-radius: 14px; object-fit: contain; background: white; }
 .food-img { padding: 0; object-fit: cover; }
+.continent-card { grid-column: 1 / -1; }
+.continent-map { width: 100%; height: 360px; border: 5px solid white; border-radius: 14px; background: #cde8f5; text-align: left; }
+.continent-map .leaflet-popup-content { font-family: "Atkinson Hyperlegible", sans-serif; font-size: 16px; }
 .wide { width: 100%; }
 .quiz-flag { margin-top: 15px; }
 .quiz-flag .flag-img { width: 180px; height: auto; }
@@ -203,6 +206,7 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
   .brand span:last-child { display: none; }
   .explore-grid, .badge-row { grid-template-columns: 1fr; }
   .player-bank { grid-template-columns: 1fr; }
+  .continent-map { height: 300px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }

@@ -62,7 +62,7 @@ const countries = [
   {code:"gh",name:"Ghana",continent:"Africa",food:"Jollof_rice",foodName:"Jollof rice",fact:"Ghana reached the quarterfinals in 2010."},
   {code:"tn",name:"Tunisia",continent:"Africa",food:"Brik",foodName:"Brik",fact:"Tunisia was the first African team to win a World Cup match."},
   {code:"cv",name:"Cabo Verde",continent:"Africa",food:"Cachupa",foodName:"Cachupa",fact:"Cabo Verde is a group of Atlantic Ocean islands."},
-  {code:"jp",name:"Japan",continent:"Asia",food:"Onigiri",foodName:"Onigiri",fact:"Japan's team is called the Samurai Blue."},
+  {code:"jp",name:"Japan",continent:"Asia",food:"Sushi",foodName:"Salmon nigiri sushi",foodImage:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nigiri_Sushi_%2825966163204%29.jpg/960px-Nigiri_Sushi_%2825966163204%29.jpg",fact:"Japan's team is called the Samurai Blue."},
   {code:"kr",name:"South Korea",continent:"Asia",food:"Bibimbap",foodName:"Bibimbap",fact:"South Korea reached the semifinals in 2002."},
   {code:"ir",name:"Iran",continent:"Asia",food:"Chelow_kabab",foodName:"Chelow kebab",fact:"Iran is one of Asia's most successful teams."},
   {code:"sa",name:"Saudi Arabia",continent:"Asia",food:"Kabsa",foodName:"Kabsa",fact:"Saudi Arabia beat Argentina at the 2022 World Cup."},
@@ -195,9 +195,34 @@ function worldPage(){
 }
 function countryCards(list){return list.map(c=>`<button class="country-card" data-country="${c.code}">${flag(c)}<h3>${c.name}</h3><p>${c.continent}</p>${c.favorite?'<span class="favorite-tag">Tournament favorite</span>':""}${populousCodes.has(c.code)?'<span class="population-tag">Top 20 population</span>':""}${state.countryStamps.includes(c.code)?'<span class="earned-tag">STAMP EARNED</span>':""}</button>`).join("");}
 function filterCountries(filter){const list=filter==="all"?countries:filter==="favorite"?countries.filter(c=>c.favorite):filter==="population"?countries.filter(c=>populousCodes.has(c.code)):countries.filter(c=>c.continent.includes(filter));document.querySelector("#country-grid").innerHTML=countryCards(list);document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter));}
+const continentViews = {
+  "North America": {center:[40,-100],zoom:3},
+  "South America": {center:[-18,-60],zoom:3},
+  "Europe": {center:[52,15],zoom:3},
+  "Africa": {center:[2,20],zoom:3},
+  "Asia": {center:[34,90],zoom:3},
+  "Oceania": {center:[-24,140],zoom:3},
+  "Europe and Asia": {center:[39,35],zoom:4}
+};
+const countryCoordinates = {
+  us:[39,-98],mx:[23,-102],ca:[57,-106],br:[-10,-52],ar:[-34,-64],co:[4,-72],ec:[-2,-78],py:[-23,-58],uy:[-33,-56],
+  "gb-eng":[52,-1],fr:[46,2],es:[40,-4],de:[51,10],pt:[39,-8],nl:[52,5],be:[51,4],hr:[45,16],tr:[39,35],no:[62,10],ch:[47,8],at:[47,14],
+  ma:[32,-6],eg:[27,30],dz:[28,2],za:[-30,25],ci:[8,-5],sn:[14,-14],gh:[8,-1],tn:[34,9],cv:[16,-24],
+  jp:[37,138],kr:[36,128],ir:[32,54],sa:[24,45],uz:[41,64],jo:[31,36],qa:[25,51],au:[-25,134],nz:[-41,174]
+};
+function renderCountryMap(country){
+  const mapEl=document.querySelector("#continent-map");if(!mapEl||typeof L==="undefined")return;
+  const view=continentViews[country.continent]||{center:[20,0],zoom:2};
+  const map=L.map(mapEl,{scrollWheelZoom:false,minZoom:2,maxZoom:6}).setView(view.center,view.zoom);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"}).addTo(map);
+  const coords=countryCoordinates[country.code];
+  if(coords)L.circleMarker(coords,{radius:12,color:"#fff",weight:4,fillColor:"#e63946",fillOpacity:1}).addTo(map).bindPopup(`<strong>${country.name}</strong>`).openPopup();
+  setTimeout(()=>map.invalidateSize(),50);
+}
 function countryDetail(code){
   const c=countries.find(x=>x.code===code);if(!c)return worldPage();
-  page(`<button class="back" data-go="world">&larr; Country explorer</button><section class="country-profile"><div class="country-profile-head">${flag(c,"320")}<div><p class="eyebrow">${c.continent}</p><h1>${c.name}</h1><p>${c.fact}</p></div></div><div class="explore-grid"><article class="visual-card"><h3>Country Shape</h3><img class="shape-img" src="https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${c.shape||c.code}/vector.svg" alt="Shape of ${c.name}"></article><article class="visual-card"><h3>Food: ${c.foodName}</h3><img class="food-img" data-wiki="${c.food}" src="assets/food-placeholder.svg" alt="${c.foodName}"></article></div><button class="primary wide" data-country-quiz="${c.code}">${state.countryStamps.includes(c.code)?"Replay Quiz":"Take Quiz and Earn Stamp"} &rarr;</button></section>`);
+  page(`<button class="back" data-go="world">&larr; Country explorer</button><section class="country-profile"><div class="country-profile-head">${flag(c,"320")}<div><p class="eyebrow">${c.continent}</p><h1>${c.name}</h1><p>${c.fact}</p></div></div><div class="explore-grid"><article class="visual-card"><h3>Country Shape</h3><img class="shape-img" src="https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${c.shape||c.code}/vector.svg" alt="Shape of ${c.name}"></article><article class="visual-card"><h3>Food: ${c.foodName}</h3><img class="food-img" ${c.foodImage?`src="${c.foodImage}"`:`data-wiki="${c.food}" src="assets/food-placeholder.svg"`} alt="${c.foodName}"></article><article class="visual-card continent-card"><h3>${c.name} in ${c.continent}</h3><div id="continent-map" class="continent-map" aria-label="Map showing ${c.name} in ${c.continent}"></div></article></div><button class="primary wide" data-country-quiz="${c.code}">${state.countryStamps.includes(c.code)?"Replay Quiz":"Take Quiz and Earn Stamp"} &rarr;</button></section>`);
+  renderCountryMap(c);
 }
 function uniqueDistractors(correct,values,count=3){
   return [...new Set(values)].filter(value=>value!==correct).slice(0,count);
