@@ -154,6 +154,10 @@ const starPlayerDetails = {
   35:{dob:"1985-09-09",position:"Midfielder",stat:"2018 Ballon d'Or winner"}
 };
 starPlayers.forEach(p=>Object.assign(p,starPlayerDetails[p.rank]));
+const starCountryCodes = {
+  Argentina:"ar",Belgium:"be",Brazil:"br",Colombia:"co",Croatia:"hr",England:"gb-eng",France:"fr",Germany:"de",Ghana:"gh",
+  Morocco:"ma",Netherlands:"nl",Norway:"no",Portugal:"pt",Spain:"es",Turkiye:"tr",Uruguay:"uy",USA:"us"
+};
 
 const historyLevels = [
   {id:"rookie",title:"Rookie Researcher",badge:"Bronze Ball",questions:[
@@ -183,6 +187,7 @@ function save(){ localStorage.setItem("wc-adventure-state",JSON.stringify(state)
 function speak(text){ if(!soundOn||!("speechSynthesis" in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text);u.rate=.88;speechSynthesis.speak(u); }
 function page(html){ app.innerHTML=html; window.scrollTo({top:0,behavior:"smooth"}); app.focus({preventScroll:true}); hydrateWikiImages(); }
 function flag(country,size="160"){ return `<img class="flag-img" src="https://flagcdn.com/w${size}/${country.code}.png" alt="${country.name} flag">`; }
+function starFlag(p,size="80"){const code=starCountryCodes[p.country];return code?`<img class="star-flag" src="https://flagcdn.com/w${size}/${code}.png" alt="${p.country} flag">`:"";}
 function showToast(message){toast.textContent=message;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1900);}
 function confetti(){const box=document.querySelector("#confetti");for(let i=0;i<45;i++){const x=document.createElement("i");x.style.left=`${Math.random()*100}%`;x.style.background=["#e63946","#ffca3a","#1167b1","#2f9e44"][i%4];x.style.animationDelay=`${Math.random()*.5}s`;box.appendChild(x);setTimeout(()=>x.remove(),2300);}}
 function award(stamp,stars=5){state.stars+=stars;if(!state.stamps.includes(stamp)){state.stamps.push(stamp);confetti();}save();showToast(`Achievement earned! +${stars} stars`);}
@@ -291,7 +296,7 @@ function starCardHtml(p,locked=false){
   const rarity=starRarity(p.rank),owned=state.starCards.includes(p.rank);
   return `<button class="star-card ${rarity} ${locked&&!owned?"locked":""}" data-star-player="${p.rank}">
     <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${locked&&!owned?"Mystery Star":p.name}</h3>
-    <p class="star-country">${locked&&!owned?"Win a pack to reveal":p.country}</p>
+    <p class="star-country">${locked&&!owned?"Win a pack to reveal":`${starFlag(p)}<span>${p.country}</span>`}</p>
     <p>${locked&&!owned?"????":p.club}</p>${starMetaHtml(p,locked&&!owned)}<span class="rarity">${rarity.toUpperCase()}</span>
   </button>`;
 }
@@ -299,7 +304,7 @@ function starQuestionCard(p){
   const rarity=starRarity(p.rank);
   return `<article class="star-card ${rarity}">
     <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${p.name}</h3>
-    <p class="star-country">Answer to reveal this card</p>
+    <p class="star-country">${starFlag(p)}<span>Answer to reveal country</span></p>
     <p>Country and club hidden</p><div class="star-meta"><span>Age: ${playerAge(p.dob)}</span><span>${p.position}</span><span>Key stat hidden</span></div><span class="rarity">${rarity.toUpperCase()}</span>
   </article>`;
 }
