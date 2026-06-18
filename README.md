@@ -7,7 +7,7 @@ A tablet-first, dependency-free World Cup learning game for young soccer fans.
 - Team USA player cards with real player photos loaded from Wikipedia/Wikimedia
 - Tap-to-place Team USA formation challenge
 - Three leveled World Cup history challenges with badges
-- 39-country explorer with flags, country outlines, foods, facts, and passport quizzes
+- 48-team World Cup explorer plus Italy as a bonus non-qualified country, with flags, country outlines, foods, facts, and passport quizzes
 - Team USA quiz, soccer-smarts quiz, and penalty-kick game
 - Team USA chant coach with real supporter-video embeds, including American Outlaws chant-page clips, plus clap/drum practice fallback
 

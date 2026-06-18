@@ -165,9 +165,10 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 .filter-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 15px; }
 .filter { flex: 0 0 auto; min-height: 48px; padding: 8px 16px; border: 2px solid #b7cfdf; border-radius: 99px; background: white; font-weight: 700; }
 .filter.active { color: white; border-color: var(--blue); background: var(--blue); }
-.favorite-tag, .population-tag, .earned-tag { display: inline-block; margin: 8px 2px 0; padding: 4px 8px; border-radius: 99px; font-size: 13px; }
+.favorite-tag, .population-tag, .earned-tag, .not-qualified-tag { display: inline-block; margin: 8px 2px 0; padding: 4px 8px; border-radius: 99px; font-size: 13px; }
 .favorite-tag { color: #7b5100; background: #fff0ad; }
 .population-tag { color: #0b568f; background: #dff4ff; }
+.not-qualified-tag { color: #8a1c24; background: #ffe3e6; }
 .earned-tag { color: #126425; background: #dff7e5; }
 .country-profile { padding: clamp(16px,4vw,32px); border-radius: 24px; background: white; box-shadow: var(--shadow); }
 .country-profile-head { display: grid; grid-template-columns: minmax(170px,300px) 1fr; align-items: center; gap: 26px; }

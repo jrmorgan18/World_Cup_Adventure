@@ -35,6 +35,9 @@ const countries = [
   {code:"us",name:"United States",continent:"North America",food:"Hamburger",foodName:"Hamburger",fact:"One of three 2026 host countries.",favorite:true},
   {code:"mx",name:"Mexico",continent:"North America",food:"Taco",foodName:"Tacos",fact:"The only country to host the men's World Cup three times."},
   {code:"ca",name:"Canada",continent:"North America",food:"Poutine",foodName:"Poutine",fact:"A 2026 host with matches from coast to coast."},
+  {code:"pa",name:"Panama",continent:"North America",food:"Sancocho",foodName:"Sancocho",fact:"Panama is in Group L with England, Croatia, and Ghana."},
+  {code:"ht",name:"Haiti",continent:"North America",food:"Griot_(food)",foodName:"Griot",fact:"Haiti returned to the World Cup after last appearing in 1974."},
+  {code:"cw",name:"Cura\u00e7ao",continent:"North America",food:"Keshi_yena",foodName:"Keshi yena",fact:"Cura\u00e7ao is one of the smallest nations ever to qualify for the World Cup."},
   {code:"br",name:"Brazil",continent:"South America",food:"P%C3%A3o_de_queijo",foodName:"Pao de queijo",fact:"Brazil has won a record five men's World Cups.",favorite:true},
   {code:"ar",name:"Argentina",continent:"South America",food:"Empanada",foodName:"Empanadas",fact:"Argentina won the most recent men's World Cup in 2022.",favorite:true},
   {code:"co",name:"Colombia",continent:"South America",food:"Arepa",foodName:"Arepas",fact:"Colombia is famous for bright yellow soccer shirts.",favorite:true},
@@ -42,13 +45,18 @@ const countries = [
   {code:"py",name:"Paraguay",continent:"South America",food:"Sopa_paraguaya",foodName:"Sopa paraguaya",fact:"Paraguay is Team USA's first group opponent."},
   {code:"uy",name:"Uruguay",continent:"South America",food:"Chivito_(sandwich)",foodName:"Chivito",fact:"Uruguay won the very first World Cup in 1930."},
   {code:"gb-eng",shape:"gb",name:"England",continent:"Europe",food:"Fish_and_chips",foodName:"Fish and chips",fact:"England won the World Cup at home in 1966.",favorite:true},
+  {code:"gb-sct",shape:"gb",name:"Scotland",continent:"Europe",food:"Shortbread",foodName:"Shortbread",fact:"Scotland returned to the World Cup for the first time since 1998."},
   {code:"fr",name:"France",continent:"Europe",food:"Croissant",foodName:"Croissant",fact:"France won in 1998 and 2018.",favorite:true},
   {code:"es",name:"Spain",continent:"Europe",food:"Paella",foodName:"Paella",fact:"Spain won its first World Cup in 2010.",favorite:true},
   {code:"de",name:"Germany",continent:"Europe",food:"Bratwurst",foodName:"Bratwurst",fact:"Germany has won four men's World Cups.",favorite:true},
+  {code:"it",name:"Italy",continent:"Europe",food:"Pizza",foodName:"Pasta and pizza",fact:"Italy did not qualify for the 2026 World Cup, even though it has won the tournament four times.",notQualified:true},
   {code:"pt",name:"Portugal",continent:"Europe",food:"Pastel_de_nata",foodName:"Pastel de nata",fact:"Portugal is known for creative attacking players.",favorite:true},
   {code:"nl",name:"Netherlands",continent:"Europe",food:"Stroopwafel",foodName:"Stroopwafel",fact:"The Netherlands wears bright orange.",favorite:true},
+  {code:"se",name:"Sweden",continent:"Europe",food:"Swedish_meatballs",foodName:"Swedish meatballs",fact:"Sweden reached the 1958 World Cup final."},
   {code:"be",name:"Belgium",continent:"Europe",food:"Belgian_waffle",foodName:"Waffles",fact:"Belgium reached third place in 2018."},
   {code:"hr",name:"Croatia",continent:"Europe",food:"Pa%C5%A1ticada",foodName:"Pasticada",fact:"Croatia reached the 2018 final."},
+  {code:"cz",name:"Czechia",continent:"Europe",food:"Svíčková",foodName:"Svíčková",fact:"Czechia is in Group A with Mexico, South Africa, and South Korea."},
+  {code:"ba",name:"Bosnia and Herzegovina",continent:"Europe",food:"%C4%86evapi",foodName:"Cevapi",fact:"Bosnia and Herzegovina qualified through the European playoffs."},
   {code:"tr",name:"T\u00fcrkiye",continent:"Europe and Asia",food:"Baklava",foodName:"Baklava",fact:"T\u00fcrkiye is Team USA's final group opponent."},
   {code:"no",name:"Norway",continent:"Europe",food:"Waffle",foodName:"Norwegian waffles",fact:"Norway has one of the world's most famous strikers.",favorite:true},
   {code:"ch",name:"Switzerland",continent:"Europe",food:"Fondue",foodName:"Cheese fondue",fact:"Switzerland's flag is a white cross on red."},
@@ -58,6 +66,7 @@ const countries = [
   {code:"dz",name:"Algeria",continent:"Africa",food:"Couscous",foodName:"Couscous",fact:"Algeria is Africa's largest country by area."},
   {code:"za",name:"South Africa",continent:"Africa",food:"Bobotie",foodName:"Bobotie",fact:"South Africa hosted the 2010 World Cup."},
   {code:"ci",name:"Ivory Coast",continent:"Africa",food:"Cassava",foodName:"Attieke",fact:"The team is nicknamed the Elephants."},
+  {code:"cd",name:"DR Congo",continent:"Africa",food:"Fufu",foodName:"Fufu",fact:"DR Congo returned to the World Cup for the first time since 1974."},
   {code:"sn",name:"Senegal",continent:"Africa",food:"Thieboudienne",foodName:"Thieboudienne",fact:"Senegal reached the quarterfinals in 2002."},
   {code:"gh",name:"Ghana",continent:"Africa",food:"Jollof_rice",foodName:"Jollof rice",fact:"Ghana reached the quarterfinals in 2010."},
   {code:"tn",name:"Tunisia",continent:"Africa",food:"Brik",foodName:"Brik",fact:"Tunisia was the first African team to win a World Cup match."},
@@ -65,6 +74,7 @@ const countries = [
   {code:"jp",name:"Japan",continent:"Asia",food:"Sushi",foodName:"Salmon nigiri sushi",foodImage:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nigiri_Sushi_%2825966163204%29.jpg/960px-Nigiri_Sushi_%2825966163204%29.jpg",fact:"Japan's team is called the Samurai Blue."},
   {code:"kr",name:"South Korea",continent:"Asia",food:"Bibimbap",foodName:"Bibimbap",fact:"South Korea reached the semifinals in 2002."},
   {code:"ir",name:"Iran",continent:"Asia",food:"Chelow_kabab",foodName:"Chelow kebab",fact:"Iran is one of Asia's most successful teams."},
+  {code:"iq",name:"Iraq",continent:"Asia",food:"Masgouf",foodName:"Masgouf",fact:"Iraq returned to the World Cup for the first time since 1986."},
   {code:"sa",name:"Saudi Arabia",continent:"Asia",food:"Kabsa",foodName:"Kabsa",fact:"Saudi Arabia beat Argentina at the 2022 World Cup."},
   {code:"uz",name:"Uzbekistan",continent:"Asia",food:"Pilaf",foodName:"Plov",fact:"Uzbekistan qualified for its first men's World Cup."},
   {code:"jo",name:"Jordan",continent:"Asia",food:"Mansaf",foodName:"Mansaf",fact:"Jordan qualified for its first men's World Cup."},
@@ -233,9 +243,9 @@ function placeFormation(zone){
 }
 
 function worldPage(){
-  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">World Explorer</p><h1>Explore the Soccer World</h1><p>Visit a country to see its flag, shape, continent, food, and soccer story. Then pass its quiz to stamp your passport.</p><div class="filter-row"><button class="filter active" data-filter="all">All ${countries.length}</button><button class="filter" data-filter="population">20 Most Populous</button><button class="filter" data-filter="favorite">Favorites</button><button class="filter" data-filter="Africa">Africa</button><button class="filter" data-filter="Asia">Asia</button><button class="filter" data-filter="Europe">Europe</button></div><section class="country-grid" id="country-grid">${countryCards(countries)}</section>`);
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">World Explorer</p><h1>Explore the Soccer World</h1><p>Visit all 48 World Cup teams plus Italy as a bonus country. See each flag, shape, continent, food, and soccer story, then pass its quiz to stamp your passport.</p><div class="filter-row"><button class="filter active" data-filter="all">All ${countries.length}</button><button class="filter" data-filter="population">20 Most Populous</button><button class="filter" data-filter="favorite">Favorites</button><button class="filter" data-filter="Africa">Africa</button><button class="filter" data-filter="Asia">Asia</button><button class="filter" data-filter="Europe">Europe</button></div><section class="country-grid" id="country-grid">${countryCards(countries)}</section>`);
 }
-function countryCards(list){return list.map(c=>`<button class="country-card" data-country="${c.code}">${flag(c)}<h3>${c.name}</h3><p>${c.continent}</p>${c.favorite?'<span class="favorite-tag">Tournament favorite</span>':""}${populousCodes.has(c.code)?'<span class="population-tag">Top 20 population</span>':""}${state.countryStamps.includes(c.code)?'<span class="earned-tag">STAMP EARNED</span>':""}</button>`).join("");}
+function countryCards(list){return list.map(c=>`<button class="country-card" data-country="${c.code}">${flag(c)}<h3>${c.name}</h3><p>${c.continent}</p>${c.notQualified?'<span class="not-qualified-tag">Did not qualify</span>':""}${c.favorite?'<span class="favorite-tag">Tournament favorite</span>':""}${populousCodes.has(c.code)?'<span class="population-tag">Top 20 population</span>':""}${state.countryStamps.includes(c.code)?'<span class="earned-tag">STAMP EARNED</span>':""}</button>`).join("");}
 function filterCountries(filter){const list=filter==="all"?countries:filter==="favorite"?countries.filter(c=>c.favorite):filter==="population"?countries.filter(c=>populousCodes.has(c.code)):countries.filter(c=>c.continent.includes(filter));document.querySelector("#country-grid").innerHTML=countryCards(list);document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter));}
 const continentViews = {
   "North America": {center:[40,-100],zoom:3},
@@ -247,10 +257,10 @@ const continentViews = {
   "Europe and Asia": {center:[39,35],zoom:4}
 };
 const countryCoordinates = {
-  us:[39,-98],mx:[23,-102],ca:[57,-106],br:[-10,-52],ar:[-34,-64],co:[4,-72],ec:[-2,-78],py:[-23,-58],uy:[-33,-56],
-  "gb-eng":[52,-1],fr:[46,2],es:[40,-4],de:[51,10],pt:[39,-8],nl:[52,5],be:[51,4],hr:[45,16],tr:[39,35],no:[62,10],ch:[47,8],at:[47,14],
-  ma:[32,-6],eg:[27,30],dz:[28,2],za:[-30,25],ci:[8,-5],sn:[14,-14],gh:[8,-1],tn:[34,9],cv:[16,-24],
-  jp:[37,138],kr:[36,128],ir:[32,54],sa:[24,45],uz:[41,64],jo:[31,36],qa:[25,51],au:[-25,134],nz:[-41,174]
+  us:[39,-98],mx:[23,-102],ca:[57,-106],pa:[9,-80],ht:[19,-72],cw:[12,-69],br:[-10,-52],ar:[-34,-64],co:[4,-72],ec:[-2,-78],py:[-23,-58],uy:[-33,-56],
+  "gb-eng":[52,-1],"gb-sct":[56,-4],fr:[46,2],es:[40,-4],de:[51,10],it:[42,12],pt:[39,-8],nl:[52,5],se:[62,15],be:[51,4],hr:[45,16],cz:[49,15],ba:[44,18],tr:[39,35],no:[62,10],ch:[47,8],at:[47,14],
+  ma:[32,-6],eg:[27,30],dz:[28,2],za:[-30,25],ci:[8,-5],cd:[-3,23],sn:[14,-14],gh:[8,-1],tn:[34,9],cv:[16,-24],
+  jp:[37,138],kr:[36,128],ir:[32,54],iq:[33,44],sa:[24,45],uz:[41,64],jo:[31,36],qa:[25,51],au:[-25,134],nz:[-41,174]
 };
 function renderCountryMap(country){
   const mapEl=document.querySelector("#continent-map");if(!mapEl||typeof L==="undefined")return;
