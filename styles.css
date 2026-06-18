@@ -146,6 +146,10 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 .locked-meta span { color: #637689; background: rgba(255,255,255,.6); }
 .rarity { display: inline-block; margin-top: 6px; padding: 4px 8px; border-radius: 99px; color: var(--navy); background: #fff0ad; font-size: 12px; }
 .star-detail { display: grid; grid-template-columns: minmax(280px,420px) 1fr; gap: 24px; align-items: center; padding: 24px; border-radius: 24px; background: white; box-shadow: var(--shadow); }
+.star-detail-card .star-card { width: 100%; min-height: 650px; padding: 18px; }
+.star-detail-card .star-photo { height: 390px; border-radius: 18px; }
+.star-detail-card .star-card h3 { font-size: 28px; }
+.star-detail-card .star-meta { font-size: 17px; }
 .star-question { display: grid; grid-template-columns: minmax(280px,390px) 1fr; gap: 22px; align-items: start; }
 .pack-teaser .star-card { width: 100%; }
 .country-card { text-align: center; }

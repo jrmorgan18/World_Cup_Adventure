@@ -315,7 +315,7 @@ function starCardsPage(){
 function starDetail(rank){
   const p=starPlayers.find(x=>x.rank===rank);if(!p)return;
   if(!state.starCards.includes(rank)){showToast("Win this card in a pack first.");return;}
-  page(`<button class="back" data-go="stars">&larr; Card binder</button><section class="star-detail ${starRarity(p.rank)}">${starCardHtml(p,false)}<div><p class="eyebrow">Rank #${p.rank}</p><h1>${p.name}</h1><p><strong>Country:</strong> ${p.country}</p><p><strong>Club:</strong> ${p.club}</p><p><strong>Age:</strong> ${playerAge(p.dob)}</p><p><strong>Position:</strong> ${p.position}</p><p><strong>Key stat:</strong> ${p.stat}</p><p>This card is in your collection.</p><button class="primary" data-go="star-game">Open another pack</button></div></section>`);
+  page(`<button class="back" data-go="stars">&larr; Card binder</button><section class="star-detail ${starRarity(p.rank)}"><div class="star-detail-card">${starCardHtml(p,false)}</div><div><p class="eyebrow">Rank #${p.rank}</p><h1>${p.name}</h1><p><strong>Country:</strong> ${p.country}</p><p><strong>Club:</strong> ${p.club}</p><p><strong>Age:</strong> ${playerAge(p.dob)}</p><p><strong>Position:</strong> ${p.position}</p><p><strong>Key stat:</strong> ${p.stat}</p><p>This card is in your collection.</p><button class="primary" data-go="star-game">Open another pack</button></div></section>`);
 }
 let starPack=[],starPackIndex=0;
 function startStarGame(){
