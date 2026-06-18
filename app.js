@@ -89,10 +89,11 @@ const simpleQuizzes = {
   ]
 };
 const chants = [
-  {id:"usa",title:"U-S-A!",line:"U! S! A!",beat:"stomp",tip:"Best for kickoff, big saves, and any exciting moment.",prompt:"The USA goalkeeper makes a huge save. What can fans chant?",choices:["U-S-A!","Quiet please","Go homework","Nap time"],correct:0},
-  {id:"believe",title:"I Believe",line:"I believe that we will win!",beat:"clap",tip:"A big confidence chant when the team needs energy.",prompt:"The team needs a boost late in the game. Which chant gives belief?",choices:["I believe that we will win!","Brush your teeth","Time for lunch","No more soccer"],correct:0},
-  {id:"letsgo",title:"Let's Go USA",line:"Let's go U-S-A!",beat:"clap",tip:"Easy call for the whole family to repeat together.",prompt:"Team USA is attacking. Which chant is easy for everyone?",choices:["Let's go U-S-A!","Let's go Australia","Everybody sit down","Read a book"],correct:0},
-  {id:"defense",title:"Defense",line:"Defense! Defense!",beat:"stomp",tip:"Use this when the other team has the ball near goal.",prompt:"The other team is near the USA goal. What should fans chant?",choices:["Defense! Defense!","Score for them","Snack time","Good night"],correct:0}
+  {id:"usa",title:"U-S-A!",line:"U-S-A! U-S-A!",beat:"stomp",videoId:"_4s15CkoflQ",source:"FOX Sports",tip:"The simplest USA chant. Use it after saves, goals, and big chances.",prompt:"The USA goalkeeper makes a huge save. What can fans chant?",choices:["U-S-A! U-S-A!","Quiet please","Go homework","Nap time"],correct:0},
+  {id:"believe",title:"I Believe",line:"I believe that we will win!",beat:"clap",videoId:"7bz6UMwCquM",source:"ESPN / supporter clip",tip:"A famous American soccer chant when the team needs belief.",prompt:"The team needs a boost late in the game. Which chant gives belief?",choices:["I believe that we will win!","Brush your teeth","Time for lunch","No more soccer"],correct:0},
+  {id:"weloveya",title:"We Love Ya",line:"We love ya, we love ya, we love ya!",beat:"clap",videoId:"W0EXwE6cDAk",source:"American Outlaws supporter clip",tip:"A real American Outlaws-style supporter chant for cheering the team on.",prompt:"Fans want to show the players they support them. Which chant fits?",choices:["We love ya, we love ya, we love ya!","We forgot ya","No cheering today","Go the other team"],correct:0},
+  {id:"yanks",title:"When the Yanks Go Marching In",line:"When the Yanks go marching in",beat:"stomp",videoId:"dX9E19SzMGU",source:"USA supporter clip",tip:"A USA soccer version of a classic stadium march.",prompt:"The team walks out and the band starts up. Which chant sounds like a march?",choices:["When the Yanks go marching in","Happy birthday to you","Defense only","Take me out to the ballgame"],correct:0},
+  {id:"ole",title:"Ole Ole Ole",line:"Ole, ole, ole, ole!",beat:"clap",videoId:"YveqNlrmgyM",source:"USA soccer chant clip",tip:"A classic soccer chant fans use around the world, including USA supporters.",prompt:"The crowd wants a classic soccer chant everyone can join. Which one works?",choices:["Ole, ole, ole, ole!","Row your boat","Silent reading time","Clean your room"],correct:0}
 ];
 
 const historyLevels = [
@@ -184,12 +185,14 @@ function beatSound(type="clap",times=3){
 }
 function playChant(id){
   const chant=chants.find(x=>x.id===id);if(!chant)return;
+  document.querySelectorAll(".chant-video").forEach(el=>el.innerHTML="");
+  const slot=document.querySelector(`#chant-video-${chant.id}`);
+  if(slot&&chant.videoId)slot.innerHTML=`<iframe title="${chant.title} real supporter clip" src="https://www.youtube-nocookie.com/embed/${chant.videoId}?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
   beatSound(chant.beat,chant.id==="believe"?5:3);
-  if("speechSynthesis" in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(chant.line);u.rate=.78;u.pitch=1.08;speechSynthesis.speak(u);}
-  showToast(`Practice: ${chant.line}`);
+  showToast(`Real clip: ${chant.title}`);
 }
 function chantCoach(){
-  page(`<button class="back" data-go="usa">&larr; Team USA Trail</button><p class="eyebrow">Supporter School</p><h1>Chant Coach</h1><p>Tap a chant to hear a browser-made practice clip. No real song recordings are used.</p><section class="chant-grid">${chants.map(c=>`<article class="chant-card"><h3>${c.title}</h3><p class="chant-line">${c.line}</p><p>${c.tip}</p><button class="secondary" data-play-chant="${c.id}">Play Audio</button></article>`).join("")}</section><section class="panel chant-panel"><h2>Match Moment Challenge</h2><p>Choose the chant that fits each moment.</p><button class="primary" data-start-chant-game>Start Challenge</button></section>`);
+  page(`<button class="back" data-go="usa">&larr; Team USA Trail</button><p class="eyebrow">Supporter School</p><h1>Chant Coach</h1><p>These are real USA supporter chants. Tap <strong>Real Clip</strong> to load a supporter video, or use <strong>Practice Beat</strong> if YouTube is blocked.</p><section class="chant-grid">${chants.map(c=>`<article class="chant-card"><h3>${c.title}</h3><p class="chant-line">${c.line}</p><p>${c.tip}</p><p class="source-note">Clip source: ${c.source}</p><div class="chant-actions"><button class="secondary" data-play-chant="${c.id}">Real Clip</button><button class="primary" data-practice-beat="${c.id}">Practice Beat</button></div><div class="chant-video" id="chant-video-${c.id}"></div></article>`).join("")}</section><section class="panel chant-panel"><h2>Match Moment Challenge</h2><p>Choose the chant that fits each moment.</p><button class="primary" data-start-chant-game>Start Challenge</button></section>`);
 }
 let chantRound=0,chantOrder=[];
 function startChantGame(){chantOrder=[...chants].sort(()=>Math.random()-.5);chantRound=0;renderChantRound();}
@@ -200,9 +203,9 @@ function renderChantRound(){
 function answerChant(button){
   if(button.dataset.correct!=="true"){button.classList.add("wrong");document.querySelector("#feedback").innerHTML="<strong>Good try!</strong> Pick the chant fans would use here.";return;}
   button.classList.add("correct");document.querySelectorAll("[data-chant-answer]").forEach(b=>b.disabled=true);
-  playChant(chantOrder[chantRound].id);state.stars++;save();
+  beatSound(chantOrder[chantRound].beat,chantOrder[chantRound].id==="believe"?5:3);state.stars++;save();
   document.querySelector("#feedback").innerHTML=`<strong>Nice chant! &#9733;</strong>${chantOrder[chantRound].tip}`;
-  setTimeout(()=>{chantRound++;if(chantRound<chantOrder.length)renderChantRound();else{award("chants",8);usa();}},1400);
+  setTimeout(()=>{chantRound++;if(chantRound<chantOrder.length)renderChantRound();else{award("usa",8);usa();}},1400);
 }
 
 function wikiPlayerImage(p,small=false){return `<img class="${small?"mini-player-photo":"player-photo"}" data-wiki="${p.wiki}" src="assets/player-placeholder.svg" alt="${p.name}">`;}
@@ -303,6 +306,7 @@ document.addEventListener("click",e=>{
   const hist=e.target.closest("[data-history]");if(hist)return historyLevel(hist.dataset.history);
   const quiz=e.target.closest("[data-quiz]");if(quiz)return startQuiz(simpleQuizzes[quiz.dataset.quiz],{type:"mission",id:quiz.dataset.quiz,label:"Team USA Quiz",back:"usa"});
   const play=e.target.closest("[data-play-chant]");if(play)return playChant(play.dataset.playChant);
+  const practice=e.target.closest("[data-practice-beat]");if(practice){const c=chants.find(x=>x.id===practice.dataset.practiceBeat);if(c){beatSound(c.beat,c.id==="believe"?5:3);showToast(`Practice beat: ${c.title}`);}return;}
   if(e.target.closest("[data-start-chant-game]"))return startChantGame();
   const chantAnswer=e.target.closest("[data-chant-answer]");if(chantAnswer)return answerChant(chantAnswer);
   const k=e.target.closest("[data-kick]");if(k)return kick(k.dataset.kick);

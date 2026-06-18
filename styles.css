@@ -112,6 +112,10 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
   display: inline-block; margin: 8px 0; padding: 8px 12px; border-radius: 99px;
   color: var(--navy); background: #fff0ad; font-family: Fredoka, sans-serif; font-size: 24px;
 }
+.source-note { color: #4d6072; font-size: 15px; }
+.chant-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.chant-video { overflow: hidden; border-radius: 14px; background: #dcebf4; }
+.chant-video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
 .chant-panel { margin-top: 18px; }
 .player-grid, .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .player-card, .country-card { min-height: 230px; padding: 18px; background: white; text-align: left; }
