@@ -5,6 +5,7 @@ A tablet-first, dependency-free World Cup learning game for young soccer fans.
 ## Included activities
 
 - Team USA player cards with real player photos loaded from Wikipedia/Wikimedia
+- World star trading-card binder and pack-opening game
 - Tap-to-place Team USA formation challenge
 - Three leveled World Cup history challenges with badges
 - 48-team World Cup explorer plus Italy as a bonus non-qualified country, with flags, country outlines, foods, facts, and passport quizzes

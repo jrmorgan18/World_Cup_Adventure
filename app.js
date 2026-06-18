@@ -5,12 +5,13 @@ const soundButton = document.querySelector("#sound-button");
 
 const ICON = {
   usa: "&#9733;", players: "&#9917;", world: "&#127758;",
-  history: "&#127942;", smart: "&#129504;", penalty: "&#129349;"
+  stars: "&#127775;", history: "&#127942;", smart: "&#129504;", penalty: "&#129349;"
 };
 
 const missions = [
   { id: "usa", icon: ICON.usa, title: "Team USA Trail", desc: "Meet our group and get ready to cheer." },
   { id: "players", icon: ICON.players, title: "Build Team USA", desc: "Meet the starters and place them on the field." },
+  { id: "stars", icon: ICON.stars, title: "Star Cards", desc: "Collect world stars like soccer trading cards." },
   { id: "world", icon: ICON.world, title: "World Explorer", desc: "Explore countries and earn passport stamps." },
   { id: "history", icon: ICON.history, title: "Build the Cup", desc: "Level up through World Cup history." },
   { id: "smart", icon: ICON.smart, title: "Soccer Smarts", desc: "Rules, teamwork, and great choices." },
@@ -106,6 +107,15 @@ const chants = [
   {id:"yanks",title:"Oh When the Yanks Go Marching",line:"Oh when the Yanks go marching in",beat:"stomp",videoId:"qJhhZ1TAg3I",source:"American Outlaws chants page",tip:"A USA soccer version of a classic stadium march.",prompt:"The band starts a marching rhythm. Which USA chant fits?",choices:["Oh when the Yanks go marching in","Take me out to the ballgame","Brush your teeth","Score for them"],correct:0},
   {id:"ole",title:"Come on USA ole",line:"Come on USA, ole!",beat:"clap",videoId:"cC2Tf1uijcQ",source:"American Outlaws chants page",tip:"An AO video chant with the classic soccer 'ole' sound.",prompt:"The crowd wants an 'ole' soccer chant for Team USA. Which one works?",choices:["Come on USA, ole!","Row your boat","No more soccer","Clean your room"],correct:0}
 ];
+const starPlayers = [
+  {rank:1,name:"Lamine Yamal",country:"Spain",club:"Barcelona",wiki:"Lamine_Yamal"},{rank:2,name:"Kylian Mbappe",country:"France",club:"Real Madrid",wiki:"Kylian_Mbapp%C3%A9"},{rank:3,name:"Pedri",country:"Spain",club:"Barcelona",wiki:"Pedri"},{rank:4,name:"Erling Haaland",country:"Norway",club:"Manchester City",wiki:"Erling_Haaland"},{rank:5,name:"Leo Messi",country:"Argentina",club:"Inter Miami",wiki:"Lionel_Messi"},
+  {rank:6,name:"Michael Olise",country:"France",club:"Bayern Munich",wiki:"Michael_Olise"},{rank:7,name:"Harry Kane",country:"England",club:"Bayern Munich",wiki:"Harry_Kane"},{rank:8,name:"Bruno Fernandes",country:"Portugal",club:"Manchester United",wiki:"Bruno_Fernandes"},{rank:9,name:"Vitinha",country:"Portugal",club:"Paris St. Germain",wiki:"Vitinha"},{rank:10,name:"Jeremy Doku",country:"Belgium",club:"Manchester City",wiki:"J%C3%A9r%C3%A9my_Doku"},
+  {rank:11,name:"Vinicius Jr.",country:"Brazil",club:"Real Madrid",wiki:"Vin%C3%ADcius_J%C3%BAnior"},{rank:12,name:"Gabriel",country:"Brazil",club:"Arsenal",wiki:"Gabriel_Magalh%C3%A3es"},{rank:13,name:"Declan Rice",country:"England",club:"Arsenal",wiki:"Declan_Rice"},{rank:14,name:"Nico O'Reilly",country:"England",club:"Manchester City",wiki:"Nico_O%27Reilly"},{rank:15,name:"Antoine Semenyo",country:"Ghana",club:"Manchester City",wiki:"Antoine_Semenyo"},
+  {rank:16,name:"Luis Diaz",country:"Colombia",club:"Bayern Munich",wiki:"Luis_D%C3%ADaz_(footballer,_born_1997)"},{rank:17,name:"Raphinha",country:"Brazil",club:"Barcelona",wiki:"Raphinha"},{rank:18,name:"Federico Valverde",country:"Uruguay",club:"Real Madrid",wiki:"Federico_Valverde"},{rank:19,name:"Hakan Calhanoglu",country:"Turkiye",club:"Inter Milan",wiki:"Hakan_%C3%87alhano%C4%9Flu"},{rank:20,name:"Achraf Hakimi",country:"Morocco",club:"Paris St. Germain",wiki:"Achraf_Hakimi"},
+  {rank:21,name:"Desire Doue",country:"France",club:"Paris St. Germain",wiki:"D%C3%A9sir%C3%A9_Dou%C3%A9"},{rank:22,name:"Charles De Ketelaere",country:"Belgium",club:"Atalanta",wiki:"Charles_De_Ketelaere"},{rank:23,name:"Willian Pacho",country:"Colombia",club:"Paris St. Germain",wiki:"Willian_Pacho"},{rank:24,name:"Martin Odegaard",country:"Norway",club:"Arsenal",wiki:"Martin_%C3%98degaard"},{rank:25,name:"Joshua Kimmich",country:"Germany",club:"Bayern Munich",wiki:"Joshua_Kimmich"},
+  {rank:26,name:"Bruno Guimaraes",country:"Brazil",club:"Newcastle",wiki:"Bruno_Guimar%C3%A3es"},{rank:27,name:"Jude Bellingham",country:"England",club:"Real Madrid",wiki:"Jude_Bellingham"},{rank:28,name:"Jamal Musiala",country:"Germany",club:"Bayern Munich",wiki:"Jamal_Musiala"},{rank:29,name:"Arda Guler",country:"Turkiye",club:"Real Madrid",wiki:"Arda_G%C3%BCler"},{rank:30,name:"Alexis Mac Allister",country:"Argentina",club:"Liverpool",wiki:"Alexis_Mac_Allister"},
+  {rank:31,name:"Virgil Van Dijk",country:"Netherlands",club:"Liverpool",wiki:"Virgil_van_Dijk"},{rank:32,name:"Rodri",country:"Spain",club:"Manchester City",wiki:"Rodri_(footballer,_born_1996)"},{rank:33,name:"Weston McKennie",country:"USA",club:"Juventus",wiki:"Weston_McKennie"},{rank:34,name:"Cristiano Ronaldo",country:"Portugal",club:"Al Nassr FC",wiki:"Cristiano_Ronaldo"},{rank:35,name:"Luka Modric",country:"Croatia",club:"AC Milan",wiki:"Luka_Modri%C4%87"}
+];
 
 const historyLevels = [
   {id:"rookie",title:"Rookie Researcher",badge:"Bronze Ball",questions:[
@@ -126,8 +136,8 @@ const historyLevels = [
   ]}
 ];
 
-let state = JSON.parse(localStorage.getItem("wc-adventure-state") || '{"stars":0,"stamps":[],"badges":[],"countryStamps":[]}');
-state.badges ||= []; state.countryStamps ||= []; state.stamps ||= [];
+let state = JSON.parse(localStorage.getItem("wc-adventure-state") || '{"stars":0,"stamps":[],"badges":[],"countryStamps":[],"starCards":[]}');
+state.badges ||= []; state.countryStamps ||= []; state.stamps ||= []; state.starCards ||= [];
 let soundOn = false, quizQuestions = [], quizIndex = 0, quizMeta = null, answered = false;
 let selectedPlayer = null, formationPlaced = {};
 
@@ -145,7 +155,10 @@ async function hydrateWikiImages(){
       const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${img.dataset.wiki}`),d=await r.json();
       if(d.thumbnail?.source){img.src=d.thumbnail.source;return;}
       const q=await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=700&origin=*&titles=${img.dataset.wiki}`),data=await q.json();
-      const wikiPage=Object.values(data.query?.pages||{})[0];if(wikiPage?.thumbnail?.source)img.src=wikiPage.thumbnail.source;
+      const wikiPage=Object.values(data.query?.pages||{})[0];if(wikiPage?.thumbnail?.source){img.src=wikiPage.thumbnail.source;return;}
+      const search=encodeURIComponent(img.dataset.search||img.alt);
+      const s=await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=0&gsrlimit=3&gsrsearch=${search}&prop=pageimages&pithumbsize=700&origin=*`),searchData=await s.json();
+      const match=Object.values(searchData.query?.pages||{}).find(page=>page.thumbnail?.source);if(match?.thumbnail?.source)img.src=match.thumbnail.source;
     }catch(e){}
   });
 }
@@ -224,6 +237,56 @@ function playerPage(){
   page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Build Team USA</p><h1>Meet the Starting Team</h1><p>First learn the players, then tap <strong>Play Formation Game</strong> to put all 11 in their position groups.</p><section class="player-grid">${players.map((p,i)=>`<button class="player-card" data-player="${i}">${wikiPlayerImage(p)}<h3>${p.name}</h3><p class="position">${p.role}</p><p>${p.clue}</p></button>`).join("")}</section><div class="next-row"><button class="primary" data-go="formation">Play Formation Game &rarr;</button></div>`);
 }
 function playerDetail(i){const p=players[i];showToast(`${p.name}: ${p.clue}`);speak(`${p.name}. ${p.role}. ${p.clue}`);}
+function starRarity(rank){return rank<=5?"legend":rank<=15?"rare":"common";}
+function starCardImage(p){return `<img class="star-photo" data-wiki="${p.wiki}" src="assets/player-placeholder.svg" alt="${p.name}">`;}
+function starCardHtml(p,locked=false){
+  const rarity=starRarity(p.rank),owned=state.starCards.includes(p.rank);
+  return `<button class="star-card ${rarity} ${locked&&!owned?"locked":""}" data-star-player="${p.rank}">
+    <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${locked&&!owned?"Mystery Star":p.name}</h3>
+    <p class="star-country">${locked&&!owned?"Win a pack to reveal":p.country}</p>
+    <p>${locked&&!owned?"????":p.club}</p><span class="rarity">${rarity.toUpperCase()}</span>
+  </button>`;
+}
+function starQuestionCard(p){
+  const rarity=starRarity(p.rank);
+  return `<article class="star-card ${rarity}">
+    <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${p.name}</h3>
+    <p class="star-country">Answer to reveal this card</p>
+    <p>Country and club hidden</p><span class="rarity">${rarity.toUpperCase()}</span>
+  </article>`;
+}
+function starCardsPage(){
+  const owned=starPlayers.filter(p=>state.starCards.includes(p.rank));
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Star Cards</p><h1>World Star Card Binder</h1><p>Collect star-player cards like soccer trading cards. Answer country and club questions to open packs.</p><div class="fact-strip"><div class="fact"><strong>${owned.length}/${starPlayers.length}</strong>cards collected</div><div class="fact"><strong>${owned.filter(p=>starRarity(p.rank)==="legend").length}/5</strong>legends</div><div class="fact"><strong>${state.stars}</strong>stars</div></div><div class="next-row"><button class="primary" data-go="star-game">Open a Card Pack</button></div><section class="star-grid">${starPlayers.map(p=>starCardHtml(p,true)).join("")}</section>`);
+}
+function starDetail(rank){
+  const p=starPlayers.find(x=>x.rank===rank);if(!p)return;
+  if(!state.starCards.includes(rank)){showToast("Win this card in a pack first.");return;}
+  page(`<button class="back" data-go="stars">&larr; Card binder</button><section class="star-detail ${starRarity(p.rank)}">${starCardHtml(p,false)}<div><p class="eyebrow">Rank #${p.rank}</p><h1>${p.name}</h1><p><strong>Country:</strong> ${p.country}</p><p><strong>Club:</strong> ${p.club}</p><p>This card is in your collection.</p><button class="primary" data-go="star-game">Open another pack</button></div></section>`);
+}
+let starPack=[],starPackIndex=0;
+function startStarGame(){
+  const pool=[...starPlayers].sort(()=>Math.random()-.5).slice(0,5);
+  starPack=pool.map(p=>Math.random()<.5?{p,type:"country"}:{p,type:"club"});
+  starPackIndex=0;renderStarQuestion();
+}
+function starChoices(correct,values){
+  const choices=[correct,...[...new Set(values)].filter(v=>v!==correct).sort(()=>Math.random()-.5).slice(0,3)];
+  return choices.sort(()=>Math.random()-.5);
+}
+function renderStarQuestion(){
+  const item=starPack[starPackIndex],p=item.p,isCountry=item.type==="country";
+  const choices=starChoices(isCountry?p.country:p.club,starPlayers.map(x=>isCountry?x.country:x.club));
+  page(`<button class="back" data-go="stars">&larr; Card binder</button><p class="eyebrow">Open a Pack</p><h1>Card ${starPackIndex+1} of ${starPack.length}</h1><section class="panel star-question"><div class="pack-teaser">${starQuestionCard(p)}</div><div><div class="question">${isCountry?`Which country does ${p.name} play for?`:`Which club is listed for ${p.name}?`}</div><div class="answers">${choices.map(choice=>`<button class="answer" data-star-answer="${choice=== (isCountry?p.country:p.club)}">${choice}</button>`).join("")}</div><div class="feedback" id="feedback">Answer to add this card to your binder.</div></div></section>`);
+}
+function answerStar(button){
+  const item=starPack[starPackIndex],p=item.p;
+  if(button.dataset.starAnswer!=="true"){button.classList.add("wrong");document.querySelector("#feedback").innerHTML="<strong>Good try!</strong> Pick another answer.";return;}
+  button.classList.add("correct");document.querySelectorAll("[data-star-answer]").forEach(b=>b.disabled=true);
+  if(!state.starCards.includes(p.rank)){state.starCards.push(p.rank);state.stars+=starRarity(p.rank)==="legend"?5:starRarity(p.rank)==="rare"?3:2;}
+  save();document.querySelector("#feedback").innerHTML=`<strong>Card collected!</strong> ${p.name} joins your binder.`;
+  setTimeout(()=>{starPackIndex++;if(starPackIndex<starPack.length)renderStarQuestion();else{award("stars",8);starCardsPage();}},1200);
+}
 function formation(){
   selectedPlayer=null;formationPlaced={};
   page(`<button class="back" data-go="players">&larr; Player cards</button><p class="eyebrow">Formation Challenge</p><h1>Put Team USA on the Field</h1><p>Tap a player card, then tap the correct position zone.</p><div class="formation-layout"><section class="formation-pitch">
@@ -305,11 +368,12 @@ let kicks=0,goals=0;
 function kick(direction){if(kicks>=5)return;kicks++;const choices=["left","middle","right"],keeper=choices[Math.floor(Math.random()*3)],g=document.querySelector(".goalie"),b=document.querySelector(".ball");g.style.left=keeper==="left"?"25%":keeper==="right"?"70%":"calc(50% - 34px)";b.style.left=direction==="left"?"27%":direction==="right"?"72%":"calc(50% - 25px)";b.style.bottom="260px";if(keeper!==direction){goals++;state.stars++;save();showToast("GOAL!");}else showToast("Great save!");document.querySelector("#kick-score").textContent=`Goals: ${goals} | Kicks: ${kicks} of 5`;document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=true);setTimeout(()=>{b.style.left="calc(50% - 25px)";b.style.bottom="65px";g.style.left="calc(50% - 34px)";document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=false);if(kicks===5){award("penalty",goals||1);kicks=0;goals=0;}},850);}
 function grownups(){page(`<p class="eyebrow">Watch Together</p><h1>Match-Day Games</h1><section class="game-grid"><article class="game-card"><span class="game-icon">&#128269;</span><h3>Player Spotter</h3><p>Choose two player cards and spot them on TV.</p></article><article class="game-card"><span class="game-icon">&#10112;</span><h3>Pass Counter</h3><p>Count consecutive Team USA passes.</p></article><article class="game-card"><span class="game-icon">&#9733;</span><h3>Teamwork Detective</h3><p>Spot a helpful run, pass, high five, or fair-play moment.</p></article></section>`);}
 
-function navigate(route){const routes={home,usa,chants:chantCoach,players:playerPage,formation,world:worldPage,history:historyHub,smart:()=>startQuiz(simpleQuizzes.smart,{type:"mission",id:"smart",label:"Soccer Smarts",back:"home"}),penalty,passport,grownups};(routes[route]||home)();}
+function navigate(route){const routes={home,usa,chants:chantCoach,players:playerPage,formation,stars:starCardsPage,"star-game":startStarGame,world:worldPage,history:historyHub,smart:()=>startQuiz(simpleQuizzes.smart,{type:"mission",id:"smart",label:"Soccer Smarts",back:"home"}),penalty,passport,grownups};(routes[route]||home)();}
 document.addEventListener("click",e=>{
   const go=e.target.closest("[data-go]");if(go)return navigate(go.dataset.go);
   const ans=e.target.closest("[data-answer]");if(ans)return answerQuiz(ans);
   const p=e.target.closest("[data-player]");if(p)return playerDetail(Number(p.dataset.player));
+  const sp=e.target.closest("[data-star-player]");if(sp)return starDetail(Number(sp.dataset.starPlayer));
   const select=e.target.closest("[data-select-player]");if(select)return selectFormationPlayer(select.dataset.selectPlayer);
   const zone=e.target.closest("[data-zone]");if(zone)return placeFormation(zone.dataset.zone);
   const country=e.target.closest("[data-country]");if(country)return countryDetail(country.dataset.country);
@@ -321,6 +385,7 @@ document.addEventListener("click",e=>{
   const practice=e.target.closest("[data-practice-beat]");if(practice){const c=chants.find(x=>x.id===practice.dataset.practiceBeat);if(c){beatSound(c.beat,c.id==="believe"?5:3);showToast(`Practice beat: ${c.title}`);}return;}
   if(e.target.closest("[data-start-chant-game]"))return startChantGame();
   const chantAnswer=e.target.closest("[data-chant-answer]");if(chantAnswer)return answerChant(chantAnswer);
+  const starAnswer=e.target.closest("[data-star-answer]");if(starAnswer)return answerStar(starAnswer);
   const k=e.target.closest("[data-kick]");if(k)return kick(k.dataset.kick);
   if(e.target.closest("#next-question"))return nextQuestion();
 });
