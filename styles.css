@@ -177,6 +177,10 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 .visual-card { overflow: hidden; padding: 14px; border-radius: 18px; background: #eef7fc; text-align: center; }
 .shape-img, .food-img { display: block; width: 100%; height: 240px; padding: 10px; border-radius: 14px; object-fit: contain; background: white; }
 .food-img { padding: 0; object-fit: cover; }
+.food-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.food-gallery figure { margin: 0; }
+.food-gallery .food-img { height: 220px; }
+.food-gallery figcaption { margin-top: 6px; font-weight: 700; }
 .continent-card { grid-column: 1 / -1; }
 .continent-map { width: 100%; height: 360px; border: 5px solid white; border-radius: 14px; background: #cde8f5; text-align: left; }
 .continent-map .leaflet-popup-content { font-family: "Atkinson Hyperlegible", sans-serif; font-size: 16px; }
