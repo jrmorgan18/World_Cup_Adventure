@@ -139,6 +139,10 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 .star-photo { display: block; width: 100%; height: 155px; margin-bottom: 10px; border-radius: 14px; object-fit: cover; object-position: center 18%; background: #dff4ff; }
 .star-card h3 { margin-top: 4px; font-size: 21px; }
 .star-country { color: var(--red); font-weight: 700; }
+.star-meta { display: grid; gap: 5px; margin: 10px 0; font-size: 15px; }
+.star-meta span { display: block; padding: 5px 7px; border-radius: 9px; background: rgba(255,255,255,.78); font-weight: 700; }
+.star-meta .star-stat { color: var(--navy); background: #fff0ad; }
+.locked-meta span { color: #637689; background: rgba(255,255,255,.6); }
 .rarity { display: inline-block; margin-top: 6px; padding: 4px 8px; border-radius: 99px; color: var(--navy); background: #fff0ad; font-size: 12px; }
 .star-detail { display: grid; grid-template-columns: minmax(240px,360px) 1fr; gap: 24px; align-items: center; padding: 24px; border-radius: 24px; background: white; box-shadow: var(--shadow); }
 .star-question { display: grid; grid-template-columns: minmax(230px,330px) 1fr; gap: 22px; align-items: start; }

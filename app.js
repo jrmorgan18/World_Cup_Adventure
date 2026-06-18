@@ -116,6 +116,44 @@ const starPlayers = [
   {rank:26,name:"Bruno Guimaraes",country:"Brazil",club:"Newcastle",wiki:"Bruno_Guimar%C3%A3es"},{rank:27,name:"Jude Bellingham",country:"England",club:"Real Madrid",wiki:"Jude_Bellingham"},{rank:28,name:"Jamal Musiala",country:"Germany",club:"Bayern Munich",wiki:"Jamal_Musiala"},{rank:29,name:"Arda Guler",country:"Turkiye",club:"Real Madrid",wiki:"Arda_G%C3%BCler"},{rank:30,name:"Alexis Mac Allister",country:"Argentina",club:"Liverpool",wiki:"Alexis_Mac_Allister"},
   {rank:31,name:"Virgil Van Dijk",country:"Netherlands",club:"Liverpool",wiki:"Virgil_van_Dijk"},{rank:32,name:"Rodri",country:"Spain",club:"Manchester City",wiki:"Rodri_(footballer,_born_1996)"},{rank:33,name:"Weston McKennie",country:"USA",club:"Juventus",wiki:"Weston_McKennie"},{rank:34,name:"Cristiano Ronaldo",country:"Portugal",club:"Al Nassr FC",wiki:"Cristiano_Ronaldo"},{rank:35,name:"Luka Modric",country:"Croatia",club:"AC Milan",wiki:"Luka_Modri%C4%87"}
 ];
+const starPlayerDetails = {
+  1:{dob:"2007-07-13",position:"Winger",stat:"Youngest men's EURO scorer"},
+  2:{dob:"1998-12-20",position:"Forward",stat:"12 World Cup goals"},
+  3:{dob:"2002-11-25",position:"Midfielder",stat:"2021 Kopa Trophy winner"},
+  4:{dob:"2000-07-21",position:"Striker",stat:"36 Premier League goals in 2022-23"},
+  5:{dob:"1987-06-24",position:"Forward",stat:"8 Ballon d'Or wins"},
+  6:{dob:"2001-12-12",position:"Winger",stat:"2024 Olympic silver medalist"},
+  7:{dob:"1993-07-28",position:"Striker",stat:"England's all-time top scorer"},
+  8:{dob:"1994-09-08",position:"Attacking midfielder",stat:"100+ Portugal caps"},
+  9:{dob:"2000-02-13",position:"Midfielder",stat:"2025 Champions League winner"},
+  10:{dob:"2002-05-27",position:"Winger",stat:"2023 Champions League winner"},
+  11:{dob:"2000-07-12",position:"Winger",stat:"2024 Champions League final scorer"},
+  12:{dob:"1997-12-19",position:"Center back",stat:"Premier League Team of the Year defender"},
+  13:{dob:"1999-01-14",position:"Midfielder",stat:"2023-24 Arsenal Player of the Season"},
+  14:{dob:"2005-03-21",position:"Midfielder",stat:"Man City senior debut at 19"},
+  15:{dob:"2000-01-07",position:"Forward",stat:"Ghana World Cup attacker"},
+  16:{dob:"1997-01-13",position:"Left winger",stat:"2024 Copa America finalist"},
+  17:{dob:"1996-12-14",position:"Winger",stat:"2024-25 La Liga champion"},
+  18:{dob:"1998-07-22",position:"Midfielder",stat:"2024 Champions League winner"},
+  19:{dob:"1994-02-08",position:"Midfielder",stat:"100+ Turkiye caps"},
+  20:{dob:"1998-11-04",position:"Full back",stat:"2022 World Cup semifinalist"},
+  21:{dob:"2005-06-03",position:"Winger",stat:"2025 Champions League winner"},
+  22:{dob:"2001-03-10",position:"Attacking midfielder",stat:"2024 Europa League winner"},
+  23:{dob:"2001-10-16",position:"Center back",stat:"2025 Champions League winner"},
+  24:{dob:"1998-12-17",position:"Midfielder",stat:"Arsenal captain"},
+  25:{dob:"1995-02-08",position:"Midfielder",stat:"2020 Champions League winner"},
+  26:{dob:"1997-11-16",position:"Midfielder",stat:"2021 Olympic gold medalist"},
+  27:{dob:"2003-06-29",position:"Midfielder",stat:"2024 Champions League winner"},
+  28:{dob:"2003-02-26",position:"Attacking midfielder",stat:"Youngest Bayern Bundesliga scorer"},
+  29:{dob:"2005-02-25",position:"Attacking midfielder",stat:"Youngest Turkiye EURO scorer"},
+  30:{dob:"1998-12-24",position:"Midfielder",stat:"2022 World Cup winner"},
+  31:{dob:"1991-07-08",position:"Center back",stat:"2019 Champions League winner"},
+  32:{dob:"1996-06-22",position:"Defensive midfielder",stat:"2024 Ballon d'Or winner"},
+  33:{dob:"1998-08-28",position:"Midfielder",stat:"2021 Concacaf Nations League winner"},
+  34:{dob:"1985-02-05",position:"Forward",stat:"5 Ballon d'Or wins"},
+  35:{dob:"1985-09-09",position:"Midfielder",stat:"2018 Ballon d'Or winner"}
+};
+starPlayers.forEach(p=>Object.assign(p,starPlayerDetails[p.rank]));
 
 const historyLevels = [
   {id:"rookie",title:"Rookie Researcher",badge:"Bronze Ball",questions:[
@@ -239,12 +277,22 @@ function playerPage(){
 function playerDetail(i){const p=players[i];showToast(`${p.name}: ${p.clue}`);speak(`${p.name}. ${p.role}. ${p.clue}`);}
 function starRarity(rank){return rank<=5?"legend":rank<=15?"rare":"common";}
 function starCardImage(p){return `<img class="star-photo" data-wiki="${p.wiki}" src="assets/player-placeholder.svg" alt="${p.name}">`;}
+function playerAge(dob){
+  const birth=new Date(`${dob}T00:00:00`),today=new Date();
+  let age=today.getFullYear()-birth.getFullYear();
+  const beforeBirthday=today.getMonth()<birth.getMonth()||(today.getMonth()===birth.getMonth()&&today.getDate()<birth.getDate());
+  return beforeBirthday?age-1:age;
+}
+function starMetaHtml(p,locked=false){
+  if(locked)return `<div class="star-meta locked-meta"><span>Age: ?</span><span>Position: ?</span><span>Key stat: ?</span></div>`;
+  return `<div class="star-meta"><span>Age: ${playerAge(p.dob)}</span><span>${p.position}</span><span class="star-stat">${p.stat}</span></div>`;
+}
 function starCardHtml(p,locked=false){
   const rarity=starRarity(p.rank),owned=state.starCards.includes(p.rank);
   return `<button class="star-card ${rarity} ${locked&&!owned?"locked":""}" data-star-player="${p.rank}">
     <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${locked&&!owned?"Mystery Star":p.name}</h3>
     <p class="star-country">${locked&&!owned?"Win a pack to reveal":p.country}</p>
-    <p>${locked&&!owned?"????":p.club}</p><span class="rarity">${rarity.toUpperCase()}</span>
+    <p>${locked&&!owned?"????":p.club}</p>${starMetaHtml(p,locked&&!owned)}<span class="rarity">${rarity.toUpperCase()}</span>
   </button>`;
 }
 function starQuestionCard(p){
@@ -252,7 +300,7 @@ function starQuestionCard(p){
   return `<article class="star-card ${rarity}">
     <span class="rank">#${p.rank}</span>${starCardImage(p)}<h3>${p.name}</h3>
     <p class="star-country">Answer to reveal this card</p>
-    <p>Country and club hidden</p><span class="rarity">${rarity.toUpperCase()}</span>
+    <p>Country and club hidden</p><div class="star-meta"><span>Age: ${playerAge(p.dob)}</span><span>${p.position}</span><span>Key stat hidden</span></div><span class="rarity">${rarity.toUpperCase()}</span>
   </article>`;
 }
 function starCardsPage(){
@@ -262,7 +310,7 @@ function starCardsPage(){
 function starDetail(rank){
   const p=starPlayers.find(x=>x.rank===rank);if(!p)return;
   if(!state.starCards.includes(rank)){showToast("Win this card in a pack first.");return;}
-  page(`<button class="back" data-go="stars">&larr; Card binder</button><section class="star-detail ${starRarity(p.rank)}">${starCardHtml(p,false)}<div><p class="eyebrow">Rank #${p.rank}</p><h1>${p.name}</h1><p><strong>Country:</strong> ${p.country}</p><p><strong>Club:</strong> ${p.club}</p><p>This card is in your collection.</p><button class="primary" data-go="star-game">Open another pack</button></div></section>`);
+  page(`<button class="back" data-go="stars">&larr; Card binder</button><section class="star-detail ${starRarity(p.rank)}">${starCardHtml(p,false)}<div><p class="eyebrow">Rank #${p.rank}</p><h1>${p.name}</h1><p><strong>Country:</strong> ${p.country}</p><p><strong>Club:</strong> ${p.club}</p><p><strong>Age:</strong> ${playerAge(p.dob)}</p><p><strong>Position:</strong> ${p.position}</p><p><strong>Key stat:</strong> ${p.stat}</p><p>This card is in your collection.</p><button class="primary" data-go="star-game">Open another pack</button></div></section>`);
 }
 let starPack=[],starPackIndex=0;
 function startStarGame(){
