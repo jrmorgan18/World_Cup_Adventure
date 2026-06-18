@@ -9,7 +9,7 @@ A tablet-first, dependency-free World Cup learning game for young soccer fans.
 - Three leveled World Cup history challenges with badges
 - 39-country explorer with flags, country outlines, foods, facts, and passport quizzes
 - Team USA quiz, soccer-smarts quiz, and penalty-kick game
-- Team USA chant coach with real supporter-video embeds plus clap/drum practice fallback
+- Team USA chant coach with real supporter-video embeds, including American Outlaws chant-page clips, plus clap/drum practice fallback
 
 ## Run locally
 
@@ -36,4 +36,4 @@ Progress is stored only in the browser with `localStorage`.
 - The illustrated hero was generated for this project and does not use official team marks.
 - Flags load from FlagCDN, country outlines from the Mapsicon project, and player/food photos from Wikipedia/Wikimedia.
 - External images require an internet connection.
-- Chant clips are embedded from YouTube/no-cookie supporter videos; no recordings are downloaded or rehosted.
+- Chant clips are embedded from YouTube/no-cookie supporter videos, with several sourced from the American Outlaws chants page; no recordings are downloaded or rehosted.
