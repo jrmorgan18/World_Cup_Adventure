@@ -9,6 +9,7 @@ A tablet-first, dependency-free World Cup learning game for young soccer fans.
 - Three leveled World Cup history challenges with badges
 - 39-country explorer with flags, country outlines, foods, facts, and passport quizzes
 - Team USA quiz, soccer-smarts quiz, and penalty-kick game
+- Team USA chant coach with browser-generated voice, clap, and drum audio
 
 ## Run locally
 
@@ -35,3 +36,4 @@ Progress is stored only in the browser with `localStorage`.
 - The illustrated hero was generated for this project and does not use official team marks.
 - Flags load from FlagCDN, country outlines from the Mapsicon project, and player/food photos from Wikipedia/Wikimedia.
 - External images require an internet connection.
+- Chant audio is generated in the browser; no copyrighted song recordings are embedded.

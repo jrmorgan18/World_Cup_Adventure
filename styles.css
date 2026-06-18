@@ -96,6 +96,23 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
 }
 .flag-img { display: block; width: 72px; height: 48px; object-fit: cover; border: 2px solid white; border-radius: 7px; box-shadow: 0 2px 7px rgba(8,43,91,.22); }
 .match time { color: var(--red); font-weight: 700; }
+.chant-preview {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px;
+  margin-top: 18px; padding: 20px; border-radius: 22px;
+  color: white; background: linear-gradient(135deg, var(--navy), var(--blue)); box-shadow: var(--shadow);
+}
+.chant-preview .eyebrow { color: var(--gold); }
+.chant-preview h2, .chant-preview p { margin: 4px 0; }
+.chant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
+.chant-card {
+  padding: 20px; border-radius: 20px; background: white; box-shadow: var(--shadow);
+  border: 3px solid #d9e5ec;
+}
+.chant-line {
+  display: inline-block; margin: 8px 0; padding: 8px 12px; border-radius: 99px;
+  color: var(--navy); background: #fff0ad; font-family: Fredoka, sans-serif; font-size: 24px;
+}
+.chant-panel { margin-top: 18px; }
 .player-grid, .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .player-card, .country-card { min-height: 230px; padding: 18px; background: white; text-align: left; }
 .player-face {
@@ -193,6 +210,7 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
   .fact-strip { grid-template-columns: 1fr; }
   .passport { grid-template-columns: repeat(2, 1fr); }
   .formation-layout, .country-profile-head { grid-template-columns: 1fr; }
+  .chant-preview { grid-template-columns: 1fr; }
   .formation-pitch { min-height: 600px; }
   .level-grid { grid-template-columns: 1fr; }
 }
@@ -200,6 +218,7 @@ button:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(8,43,91,.17
   body { font-size: 17px; }
   .hero, .hero img { min-height: 430px; }
   .game-grid, .player-grid, .country-grid, .answers { grid-template-columns: 1fr; }
+  .chant-grid { grid-template-columns: 1fr; }
   .game-card { min-height: 135px; }
   .match { grid-template-columns: 58px 1fr; }
   .match .primary { grid-column: 1 / -1; }

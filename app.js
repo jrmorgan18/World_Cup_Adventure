@@ -88,6 +88,12 @@ const simpleQuizzes = {
     {q:"A group game ends tied. What happens?",a:["Each team earns 1 point","Both lose","Play all night","Flip a coin"],c:0,f:"A group-stage tie earns each team one point."}
   ]
 };
+const chants = [
+  {id:"usa",title:"U-S-A!",line:"U! S! A!",beat:"stomp",tip:"Best for kickoff, big saves, and any exciting moment.",prompt:"The USA goalkeeper makes a huge save. What can fans chant?",choices:["U-S-A!","Quiet please","Go homework","Nap time"],correct:0},
+  {id:"believe",title:"I Believe",line:"I believe that we will win!",beat:"clap",tip:"A big confidence chant when the team needs energy.",prompt:"The team needs a boost late in the game. Which chant gives belief?",choices:["I believe that we will win!","Brush your teeth","Time for lunch","No more soccer"],correct:0},
+  {id:"letsgo",title:"Let's Go USA",line:"Let's go U-S-A!",beat:"clap",tip:"Easy call for the whole family to repeat together.",prompt:"Team USA is attacking. Which chant is easy for everyone?",choices:["Let's go U-S-A!","Let's go Australia","Everybody sit down","Read a book"],correct:0},
+  {id:"defense",title:"Defense",line:"Defense! Defense!",beat:"stomp",tip:"Use this when the other team has the ball near goal.",prompt:"The other team is near the USA goal. What should fans chant?",choices:["Defense! Defense!","Score for them","Snack time","Good night"],correct:0}
+];
 
 const historyLevels = [
   {id:"rookie",title:"Rookie Researcher",badge:"Bronze Ball",questions:[
@@ -164,7 +170,39 @@ function finishQuiz(){
 
 function usa(){
   const group=["py","au","tr"].map(code=>countries.find(c=>c.code===code));
-  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Team USA Trail</p><h1>Our Group Journey</h1><p>Teams play three group games. Wins earn <strong>3 points</strong>, ties earn <strong>1 point</strong>.</p><section class="match-trail">${group.map((c,i)=>`<article class="match">${flag(c)}<div><time>MATCH ${i+1}</time><h3>USA vs ${c.name}</h3><p>${c.fact}</p></div><button class="primary" data-country="${c.code}">Explore</button></article>`).join("")}</section><div class="next-row"><button class="primary" data-quiz="usa">Take Team USA Quiz</button></div>`);
+  page(`<button class="back" data-go="home">&larr; All missions</button><p class="eyebrow">Team USA Trail</p><h1>Our Group Journey</h1><p>Teams play three group games. Wins earn <strong>3 points</strong>, ties earn <strong>1 point</strong>.</p><section class="match-trail">${group.map((c,i)=>`<article class="match">${flag(c)}<div><time>MATCH ${i+1}</time><h3>USA vs ${c.name}</h3><p>${c.fact}</p></div><button class="primary" data-country="${c.code}">Explore</button></article>`).join("")}</section><section class="chant-preview"><div><p class="eyebrow">Supporter School</p><h2>Learn Team USA Chants</h2><p>Practice kid-safe fan chants with call-and-response audio, then pick the right chant for match moments.</p></div><button class="primary" data-go="chants">Play Chant Coach</button></section><div class="next-row"><button class="primary" data-quiz="usa">Take Team USA Quiz</button></div>`);
+}
+function beatSound(type="clap",times=3){
+  const AudioContext=window.AudioContext||window.webkitAudioContext;if(!AudioContext)return;
+  const ctx=new AudioContext();
+  for(let i=0;i<times;i++){
+    const t=ctx.currentTime+i*.32,osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type=type==="stomp"?"sine":"square";osc.frequency.setValueAtTime(type==="stomp"?115:650,t);
+    gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(type==="stomp"?.22:.08,t+.02);gain.gain.exponentialRampToValueAtTime(.0001,t+.12);
+    osc.connect(gain).connect(ctx.destination);osc.start(t);osc.stop(t+.14);
+  }
+}
+function playChant(id){
+  const chant=chants.find(x=>x.id===id);if(!chant)return;
+  beatSound(chant.beat,chant.id==="believe"?5:3);
+  if("speechSynthesis" in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(chant.line);u.rate=.78;u.pitch=1.08;speechSynthesis.speak(u);}
+  showToast(`Practice: ${chant.line}`);
+}
+function chantCoach(){
+  page(`<button class="back" data-go="usa">&larr; Team USA Trail</button><p class="eyebrow">Supporter School</p><h1>Chant Coach</h1><p>Tap a chant to hear a browser-made practice clip. No real song recordings are used.</p><section class="chant-grid">${chants.map(c=>`<article class="chant-card"><h3>${c.title}</h3><p class="chant-line">${c.line}</p><p>${c.tip}</p><button class="secondary" data-play-chant="${c.id}">Play Audio</button></article>`).join("")}</section><section class="panel chant-panel"><h2>Match Moment Challenge</h2><p>Choose the chant that fits each moment.</p><button class="primary" data-start-chant-game>Start Challenge</button></section>`);
+}
+let chantRound=0,chantOrder=[];
+function startChantGame(){chantOrder=[...chants].sort(()=>Math.random()-.5);chantRound=0;renderChantRound();}
+function renderChantRound(){
+  const c=chantOrder[chantRound],choices=[...c.choices].sort(()=>Math.random()-.5),correct=choices.indexOf(c.choices[c.correct]);
+  page(`<button class="back" data-go="chants">&larr; Chant Coach</button><p class="eyebrow">Chant Challenge</p><h1>Round ${chantRound+1} of ${chantOrder.length}</h1><section class="panel"><div class="question">${c.prompt}</div><div class="answers">${choices.map((x,i)=>`<button class="answer" data-chant-answer="${i}" data-correct="${i===correct}">${x}</button>`).join("")}</div><div class="feedback" id="feedback">Pick the best chant for this match moment.</div></section>`);
+}
+function answerChant(button){
+  if(button.dataset.correct!=="true"){button.classList.add("wrong");document.querySelector("#feedback").innerHTML="<strong>Good try!</strong> Pick the chant fans would use here.";return;}
+  button.classList.add("correct");document.querySelectorAll("[data-chant-answer]").forEach(b=>b.disabled=true);
+  playChant(chantOrder[chantRound].id);state.stars++;save();
+  document.querySelector("#feedback").innerHTML=`<strong>Nice chant! &#9733;</strong>${chantOrder[chantRound].tip}`;
+  setTimeout(()=>{chantRound++;if(chantRound<chantOrder.length)renderChantRound();else{award("chants",8);usa();}},1400);
 }
 
 function wikiPlayerImage(p,small=false){return `<img class="${small?"mini-player-photo":"player-photo"}" data-wiki="${p.wiki}" src="assets/player-placeholder.svg" alt="${p.name}">`;}
@@ -252,7 +290,7 @@ let kicks=0,goals=0;
 function kick(direction){if(kicks>=5)return;kicks++;const choices=["left","middle","right"],keeper=choices[Math.floor(Math.random()*3)],g=document.querySelector(".goalie"),b=document.querySelector(".ball");g.style.left=keeper==="left"?"25%":keeper==="right"?"70%":"calc(50% - 34px)";b.style.left=direction==="left"?"27%":direction==="right"?"72%":"calc(50% - 25px)";b.style.bottom="260px";if(keeper!==direction){goals++;state.stars++;save();showToast("GOAL!");}else showToast("Great save!");document.querySelector("#kick-score").textContent=`Goals: ${goals} | Kicks: ${kicks} of 5`;document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=true);setTimeout(()=>{b.style.left="calc(50% - 25px)";b.style.bottom="65px";g.style.left="calc(50% - 34px)";document.querySelectorAll("[data-kick]").forEach(x=>x.disabled=false);if(kicks===5){award("penalty",goals||1);kicks=0;goals=0;}},850);}
 function grownups(){page(`<p class="eyebrow">Watch Together</p><h1>Match-Day Games</h1><section class="game-grid"><article class="game-card"><span class="game-icon">&#128269;</span><h3>Player Spotter</h3><p>Choose two player cards and spot them on TV.</p></article><article class="game-card"><span class="game-icon">&#10112;</span><h3>Pass Counter</h3><p>Count consecutive Team USA passes.</p></article><article class="game-card"><span class="game-icon">&#9733;</span><h3>Teamwork Detective</h3><p>Spot a helpful run, pass, high five, or fair-play moment.</p></article></section>`);}
 
-function navigate(route){const routes={home,usa,players:playerPage,formation,world:worldPage,history:historyHub,smart:()=>startQuiz(simpleQuizzes.smart,{type:"mission",id:"smart",label:"Soccer Smarts",back:"home"}),penalty,passport,grownups};(routes[route]||home)();}
+function navigate(route){const routes={home,usa,chants:chantCoach,players:playerPage,formation,world:worldPage,history:historyHub,smart:()=>startQuiz(simpleQuizzes.smart,{type:"mission",id:"smart",label:"Soccer Smarts",back:"home"}),penalty,passport,grownups};(routes[route]||home)();}
 document.addEventListener("click",e=>{
   const go=e.target.closest("[data-go]");if(go)return navigate(go.dataset.go);
   const ans=e.target.closest("[data-answer]");if(ans)return answerQuiz(ans);
@@ -264,6 +302,9 @@ document.addEventListener("click",e=>{
   const filter=e.target.closest("[data-filter]");if(filter)return filterCountries(filter.dataset.filter);
   const hist=e.target.closest("[data-history]");if(hist)return historyLevel(hist.dataset.history);
   const quiz=e.target.closest("[data-quiz]");if(quiz)return startQuiz(simpleQuizzes[quiz.dataset.quiz],{type:"mission",id:quiz.dataset.quiz,label:"Team USA Quiz",back:"usa"});
+  const play=e.target.closest("[data-play-chant]");if(play)return playChant(play.dataset.playChant);
+  if(e.target.closest("[data-start-chant-game]"))return startChantGame();
+  const chantAnswer=e.target.closest("[data-chant-answer]");if(chantAnswer)return answerChant(chantAnswer);
   const k=e.target.closest("[data-kick]");if(k)return kick(k.dataset.kick);
   if(e.target.closest("#next-question"))return nextQuestion();
 });
